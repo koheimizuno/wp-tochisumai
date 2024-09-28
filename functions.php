@@ -28,8 +28,10 @@ function my_script_init() {
   }
   
   if(is_singular( 'land' ) || is_post_type_archive('land')){
+    wp_enqueue_style("swiper", "https://unpkg.com/swiper@8/swiper-bundle.min.css", array(), "all");
     wp_enqueue_style("land", get_stylesheet_directory_uri() . "/css/land.min.css", array(), filemtime(get_stylesheet_directory() . "/css/land.min.css"));
-    wp_enqueue_script( 'land', get_stylesheet_directory_uri() . "/js/land.js", array(), filemtime(get_stylesheet_directory() . "/js/land.js"), true);
+    wp_enqueue_script("swiper", "https://unpkg.com/swiper@8/swiper-bundle.min.js", array(), true);
+    wp_enqueue_script( 'land', get_stylesheet_directory_uri() . "/js/land.js", array('swiper'), filemtime(get_stylesheet_directory() . "/js/land.js"), true);
   }
 
   if((is_single()) || is_category() || (is_archive())){
@@ -584,19 +586,6 @@ function create_specific_posts($start_pos, $end_pos) {
         sleep(2);
     }
 }
-
-// Schedule the event
-function my_schedule_event() {
-    // Check if the event is already scheduled
-    if (!wp_next_scheduled('daily_post')) {
-        // Schedule the event to run daily at 8 AM
-        wp_schedule_event(strtotime('21:35:00'), 'daily', 'daily_post');
-    }
-}
-add_action('wp', 'my_schedule_event');
-
-// // Hook the function to the scheduled event
-add_action('daily_post', 'daily_post_func');
 
 // daily_post_func
 function daily_post_func() {

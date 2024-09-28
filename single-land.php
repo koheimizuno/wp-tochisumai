@@ -68,8 +68,34 @@ do_action( 'lightning_site_header_after', 'lightning_site_header_after' );
                 <h2 class="land-title"><?php the_title(); ?></h2>
                 <p class="land-subtitle"><?php the_content(); ?></p>
             </div>
+
             <div class="land-preview">
-                <img src="<?php echo get_post_meta(get_the_ID(), 'detail_imgs', true)[0];?>" alt="detail-img">
+                <div class="swiper main-swiper">
+                    <div class="swiper-wrapper">
+                        <?php
+                            $detail_imgs = get_post_meta(get_the_ID(), 'detail_imgs', true);
+                            for ($i=0; $i < count($detail_imgs); $i++) {
+                                echo '<div class="swiper-slide">';
+                                echo '<img src="' . $detail_imgs[$i] . '" alt="detail-img">';
+                                echo '</div>';
+                            }
+                        ?>
+                    </div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+                </div>
+                <div class="swiper thumbs-swiper">
+                    <div class="swiper-wrapper">
+                        <?php
+                            $detail_imgs = get_post_meta(get_the_ID(), 'detail_imgs', true);
+                            for ($i=0; $i < count($detail_imgs); $i++) {
+                                echo '<div class="swiper-slide">';
+                                echo '<img src="' . $detail_imgs[$i] . '" alt="detail-img">';
+                                echo '</div>';
+                            }
+                        ?>
+                    </div>
+                </div>
             </div>
 
             <div class=" land-detail-price">
