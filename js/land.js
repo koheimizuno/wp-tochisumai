@@ -1,3 +1,28 @@
+document.addEventListener("DOMContentLoaded", function () {
+  // Initialize the thumbnails swiper first
+  const thumbsSwiper = new Swiper(".thumbs-swiper", {
+    slidesPerView: 4, // Number of thumbnails to show at once
+    spaceBetween: 10, // Space between thumbnails
+    freeMode: true, // Allows free scrolling through the thumbnails
+    watchSlidesVisibility: true, // Ensures visible slides are updated
+    watchSlidesProgress: true, // Tracks progress of the slides
+  });
+
+  // Initialize the main swiper and link it with the thumbnails
+  const mainSwiper = new Swiper(".main-swiper", {
+    loop: true,
+    centeredSlides: true,
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+    thumbs: {
+      swiper: thumbsSwiper, // Link to the thumbs swiper
+    },
+    speed: 1000, // Transition speed for the main slider
+  });
+});
+
 const selectBox = document.getElementById("selectBox");
 const optionsContainer = document.getElementById("optionsContainer");
 const options = document.querySelectorAll(".option");
