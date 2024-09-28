@@ -1,0 +1,44 @@
+@charset "utf-8";
+// @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Poppins:wght@400;700&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&display=swap');
+
+// 色
+$color-main: #a91a48; // ベース色
+$color-main-gray: #666666; // アクティブ色
+$color-background-base: url(../img/common/bg_main.jpg); // 背景色
+$color-background-active: #333333; // 背景色
+$color-background-footer: #171717; // 背景色
+$color-text-base: #fff; // テキスト色
+$hover-opacity: 0.8; // 透過度
+
+// レイアウト幅
+$layout-width-canvas: 1700px;
+$layout-width-inner: 1200px;
+
+// ブレークポイント
+$breakpoints: (
+  "sp": "(max-width: 767px)",
+  "tabs": "(max-width: 991px)",
+  "tab": "(max-width: #{$layout-width-inner - 1px})",
+  "tabl": "(max-width: #{$layout-width-canvas - 1px})",
+  "pc": "(min-width: #{$layout-width-inner})",
+);
+
+// メディアクエリー
+@mixin mq($breakpoint: sp) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
+
+// 余白
+$padding-tab: 60px;
+$padding-sp: 24px;
+
+// フォント
+$font-family-default: "Shippori Mincho", serif;
+// $font-family-poppins: 'Poppins', sans-serif;
+$font-size-base: 16px;
+$font-weight-base: 400;
+$line-height-base: 1.7;

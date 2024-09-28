@@ -1,0 +1,20 @@
+@media (max-width: 767px) {
+    .gc_gallery-wrap {
+        display: grid;
+        gap: 3rem  1.2rem;
+        grid-template-columns: 1fr 1fr;
+
+    }
+    .gc_gallery-item {
+        width: 100%;
+    }
+    
+    .page-header-title, h1.page-header-title {
+        font-size: 18px;
+    }
+
+    .post-type-archive-case .gc_gallery-wrap {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}

@@ -1,0 +1,741 @@
+// reset start
+$small-screen: 425px;
+$middle-screen: 768px;
+$large-screen: 1024px;
+$price-color: #a6f569;
+li {
+  list-style-type: none;
+}
+table,
+tr,
+td {
+  border: 1px #ccc solid;
+  border-collapse: collapse;
+}
+p {
+  padding: 0;
+  margin: 0;
+}
+.wrapper1280 {
+  position: relative;
+  width: 1280px;
+  margin: 0 auto;
+  max-width: calc(100% - 40px);
+}
+
+// reset end
+
+// Land-Archive Start
+ul {
+  padding: 0;
+  margin: 0;
+}
+
+.land-nofound {
+  width: 100%;
+}
+
+.perpagesortsec {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 30px;
+  @media screen and (max-width: $small-screen) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .itemSelect {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    @media screen and (max-width: $small-screen) {
+      width: 100%;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 5px;
+    }
+    > label {
+      white-space: nowrap;
+    }
+    select {
+      width: 170px;
+      background-color: #fff;
+      border: 1px #ccc solid;
+      border-radius: 5px;
+      margin: 0;
+      cursor: pointer;
+      @media screen and (max-width: $small-screen) {
+        width: 100%;
+      }
+      option {
+        display: inline-block;
+        padding: 10px;
+        cursor: pointer;
+        &:hover {
+          background-color: #ddd;
+        }
+      }
+    }
+  }
+  .custom-select {
+    position: relative;
+    width: 170px;
+
+    .select-box {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .options-container {
+      display: none; /* Hidden by default */
+      position: absolute;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      width: 100%;
+      border-radius: 5px;
+      z-index: 1;
+
+      .option {
+        padding: 10px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #ddd;
+        }
+      }
+    }
+
+    &.active {
+      .options-container {
+        display: block;
+      }
+    }
+  }
+}
+
+.land-archive {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.land-row {
+  display: flex;
+  flex-direction: row;
+  // justify-content: space-between;
+  align-items: stretch;
+  box-shadow: 1px 1px 5px #ddd;
+  border-radius: 5px;
+  flex: 1 1 auto;
+  height: auto;
+  &:hover {
+    scale: 1.02;
+    transition: all 0.5s;
+  }
+  @media screen and (max-width: $middle-screen) {
+    flex-direction: column;
+  }
+}
+
+.land-thumbnail {
+  width: 46%;
+  img {
+    height: 100%;
+    object-fit: contain;
+    margin: auto;
+    border-radius: 5px;
+  }
+  @media screen and (max-width: $large-screen) {
+    padding-left: 10px;
+  }
+  @media screen and (max-width: $middle-screen) {
+    width: 100%;
+    padding: 0;
+    img {
+      width: 100%;
+    }
+  }
+}
+
+.land-item-info {
+  width: 54%;
+  padding: 20px 35px 20px 50px;
+  @media screen and (max-width: $large-screen) {
+    padding: 20px 35px 20px 30px;
+  }
+  @media screen and (max-width: $middle-screen) {
+    width: 100%;
+    padding: 40px;
+  }
+  @media screen and (max-width: $small-screen) {
+    padding: 20px;
+  }
+}
+
+ul.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  li {
+    font-size: 11px;
+    border: 1px #fff solid;
+    border-radius: 20px;
+    padding: 4px 8px;
+  }
+}
+h2.land-title {
+  font-size: 25px;
+  margin: 10px 0;
+  @media screen and (max-width: $small-screen) {
+    font-size: 20px;
+    margin: 20px 0;
+  }
+}
+.land-address {
+  font-size: 15px;
+  margin: 0;
+}
+.land-pricearea {
+  font-size: 13px;
+  // margin: 5px 0;
+  @media screen and (max-width: $small-screen) {
+    margin: 10px 0;
+  }
+  span {
+    font-size: 32px;
+    font-weight: bold;
+    color: $price-color;
+    @media screen and (max-width: $small-screen) {
+      font-size: 28px;
+    }
+    &.max-price {
+      position: relative;
+      margin-left: 20px;
+      &::before {
+        content: "～";
+        position: absolute;
+        margin: auto;
+        color: #fff;
+        top: 0;
+        bottom: 0;
+        left: -20px;
+        font-size: 13px;
+        font-weight: normal;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+}
+.land-subtitle {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.table-pc {
+  text-align: center;
+  tr {
+    &:first-child {
+      background-color: #555;
+    }
+    td:first-child,
+    td:nth-child(2) {
+      width: calc(100% / 4);
+    }
+  }
+}
+.table-sp {
+  display: none;
+}
+
+@media screen and (max-width: $small-screen) {
+  .table-pc {
+    display: none;
+  }
+  .table-sp {
+    display: table;
+    tr {
+      td:first-child {
+        background-color: #555;
+        width: calc(100% / 2.5);
+      }
+    }
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2%;
+}
+.page-numbers,
+.page-number {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px #fff solid;
+  @media screen and (max-width: $small-screen) {
+    font-size: 12px;
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.page-number.active {
+  background-color: #555;
+}
+// Land-Archive End
+
+// Land-Item Start
+.land-detail-main {
+  padding-bottom: 60px;
+}
+.land-title-sec {
+  background: linear-gradient(
+      to right,
+      #757575,
+      #757575 1px,
+      transparent 1px,
+      transparent 4px
+    )
+    left bottom / 4px 1px repeat-x;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  gap: 15px;
+  .land-subtitle {
+    margin: 0;
+  }
+  @media screen and (max-width: $middle-screen) {
+    display: block;
+  }
+}
+
+.land-preview {
+  margin: 40px 0;
+  img {
+    width: 100%;
+    object-fit: cover;
+  }
+}
+
+.land-detail-price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  margin: 30px 0;
+  .price-subTxt {
+    width: 100%;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    background: linear-gradient(
+        to right,
+        #757575,
+        #757575 1px,
+        transparent 1px,
+        transparent 4px
+      )
+      left bottom / 4px 1px repeat-x;
+  }
+  .price {
+    display: inline-block;
+    color: $price-color;
+    font-size: 60px;
+    font-weight: bold;
+    @media screen and (max-width: $middle-screen) {
+      font-size: 40px;
+    }
+
+    &:nth-child(3) {
+      position: relative;
+      margin-left: 50px;
+      &::before {
+        position: absolute;
+        content: "~";
+        margin: auto;
+        color: #fff;
+        top: 0;
+        bottom: 0;
+        left: -40px;
+        font-size: 45px;
+        font-weight: normal;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+  .priceTxt {
+    display: inline-block;
+    font-size: 16px;
+    margin: 20px 5px;
+    @media screen and (max-width: $small-screen) {
+      margin: 10px 5px;
+    }
+  }
+}
+.land-detail-table {
+  margin-top: 35px;
+  tr {
+    font-size: 15px;
+    th {
+      background-color: #555;
+      min-width: 80px;
+    }
+    td {
+      padding: 20px 15px;
+    }
+  }
+}
+
+.secDetailsContents {
+  padding: 60px 0;
+  background-color: #1a333d;
+  position: relative;
+  ul.pageLinkList {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.25%;
+    @media screen and (max-width: $middle-screen) {
+      gap: 2.5%;
+    }
+    li {
+      background-color: #fff;
+      text-align: center;
+      width: 200px;
+      padding: 20px 20px;
+      border-radius: 5px;
+      box-shadow: 1px 1px 5px #ccc;
+      @media screen and (max-width: $middle-screen) {
+        margin: 1.25% 0;
+        width: 150px;
+      }
+      a {
+        color: #1a333d;
+        p {
+          &:first-child {
+            font-size: 14px;
+            font-weight: 900;
+            letter-spacing: 0;
+            @media screen and (max-width: $middle-screen) {
+              font-size: 10px;
+            }
+          }
+          &:last-child {
+            font-size: 20px;
+            @media screen and (max-width: $middle-screen) {
+              font-size: 14px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .contentsTit {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .enTit {
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 0;
+  }
+  .jpTit {
+    font-size: 28px;
+  }
+
+  .land-section {
+    padding: 60px 0;
+  }
+
+  .sec-plan {
+    .mainImgBox {
+      background-color: #fff;
+      padding: 50px 0;
+      > div {
+        width: 60%;
+        margin: auto;
+      }
+    }
+    .table-group {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 24px;
+      border-top: 1px #fff solid;
+      @media screen and (max-width: $middle-screen) {
+        display: block;
+        border-left: 1px #fff solid;
+        border-right: 1px #fff solid;
+      }
+      .table-item {
+        width: 50%;
+        text-align: center;
+        border: 1px #fff solid;
+        border-top: 0;
+        &:not(:last-child):nth-child(odd) {
+          border-right: 0;
+        }
+        &:not(:first-child):not(:nth-child(2)) {
+          .th-row {
+            display: none;
+          }
+        }
+        @media screen and (max-width: $middle-screen) {
+          width: 100%;
+          border: 0;
+          &:not(:first-child) {
+            .th-row {
+              display: none;
+            }
+          }
+        }
+        .th-row {
+          display: flex;
+          align-items: center;
+          border-bottom: 1px #fff solid;
+          > p {
+            background-color: #555;
+            font-size: 18px;
+            width: 100%;
+            height: 100%;
+            padding: 14px 10px;
+            @media screen and (max-width: $small-screen) {
+              font-size: 14px;
+            }
+            &:first-child {
+              width: 20%;
+            }
+            &:nth-child(2) {
+              width: 50%;
+              border-left: 1px #fff solid;
+              border-right: 1px #fff solid;
+              @media screen and (max-width: $small-screen) {
+                width: 40%;
+              }
+            }
+            &:last-child {
+              width: 30%;
+            }
+          }
+        }
+        .td-row {
+          display: flex;
+          align-items: center;
+          @media screen and (max-width: $middle-screen) {
+            border-bottom: 1px #fff solid;
+          }
+          > p {
+            font-size: 20px;
+            width: 100%;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 10px;
+            @media screen and (max-width: $small-screen) {
+              font-size: 16px;
+            }
+            &:first-child {
+              width: 20%;
+            }
+            &:nth-child(2) {
+              width: 50%;
+              border-left: 1px #fff solid;
+              border-right: 1px #fff solid;
+              @media screen and (max-width: $small-screen) {
+                width: 40%;
+              }
+            }
+            &:last-child {
+              width: 30%;
+              > span {
+                &:first-child {
+                  font-size: 34px;
+                  font-weight: bold;
+                  color: $price-color;
+                }
+                &:last-child {
+                  font-size: 18px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .sec-location {
+    .loclist {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 3%;
+      @media screen and (max-width: $small-screen) {
+        flex-direction: column;
+      }
+      li {
+        margin: 1.5% 0;
+        &.lg-card {
+          width: calc((100% - 3%) / 2);
+          @media screen and (max-width: $middle-screen) {
+            width: 100%;
+          }
+          img {
+            width: 100%;
+            object-fit: cover;
+          }
+          > div {
+            padding-top: 15px;
+            > h5 {
+              font-size: 18px;
+            }
+            > p {
+              font-size: 15px;
+            }
+          }
+        }
+        &.sm-card {
+          width: calc((100% - 9%) / 4);
+          border: 1px #555 solid;
+          @media screen and (max-width: $middle-screen) {
+            width: calc((100% - 3%) / 2);
+          }
+          @media screen and (max-width: $small-screen) {
+            width: 100%;
+          }
+          > div {
+            padding: 10px 15px;
+            > h5 {
+              font-size: 15px;
+              padding-bottom: 10px;
+              border-bottom: 1px #555 solid;
+            }
+            > p {
+              font-size: 14px;
+            }
+          }
+        }
+      }
+
+      &.noImg {
+        margin-top: 50px;
+        @media screen and (max-width: $middle-screen) {
+          margin-top: 20px;
+        }
+        > li {
+          border: 1px #555 solid;
+          width: calc((100% - 9%) / 4);
+          border-radius: 4px 4px 0 0;
+          @media screen and (max-width: $middle-screen) {
+            width: calc((100% - 3%) / 2);
+          }
+          @media screen and (max-width: $small-screen) {
+            width: 100%;
+          }
+          > div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 15px;
+            background-color: #555;
+            height: 74px;
+            p {
+              font-size: 14px;
+              font-weight: bold;
+            }
+            img {
+              width: 40px;
+              object-fit: cover;
+              @media screen and (max-width: $small-screen) {
+                width: 26px;
+              }
+            }
+          }
+          > p {
+            padding: 15px;
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+
+  .sec-access {
+    .mapBox {
+      margin-top: 50px;
+      iframe {
+        width: 100%;
+        height: 600px;
+      }
+    }
+  }
+
+  .sec-overview {
+    .tablelist {
+      display: flex;
+      flex-wrap: wrap;
+      .table-item {
+        width: 50%;
+        display: flex;
+        align-items: center;
+        border: 1px #fff solid;
+        &:not(:last-child):nth-child(odd) {
+          border-right: none;
+        }
+        &:not(:last-child):not(:nth-child(20)) {
+          border-bottom: none;
+        }
+        @media screen and (max-width: $middle-screen) {
+          width: 100%;
+          &:not(:last-child):nth-child(odd) {
+            border-right: 1px #fff solid;
+          }
+          &:not(:last-child) {
+            border-bottom: none;
+          }
+        }
+        h5 {
+          margin: 0;
+          padding: 10px;
+          width: 150px;
+          font-size: 15px;
+          height: 100%;
+          background-color: #555;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        p {
+          font-size: 15px;
+          width: calc(100% - 150px);
+          padding: 20px 15px;
+          height: 100%;
+          border-left: 1px #fff solid;
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+  }
+}
+
+// Land-Item End
