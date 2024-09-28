@@ -75,13 +75,41 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
                     <option value="land_ASC">土地面積が狭い</option>
                 </select>
             </div>
+        <?php
+            function enqueue_custom_scripts() {
+                wp_enqueue_script('custom-land-script', get_stylesheet_directory_uri() . '/js/land.js', array('jquery'), null, true);
+                
+                wp_localize_script('custom-land-script', 'ajax_object', array(
+                    'ajax_url' => admin_url('admin-ajax.php'),
+                    'nonce'    => wp_create_nonce('process_selection_nonce'),
+                ));
+            }
+            add_action('wp_enqueue_scripts', 'enqueue_custom_scripts');
+            
+            function process_selection_callback() {
+                check_ajax_referer('process_selection_nonce', 'security');
+            
+                $selected_value = sanitize_text_field($_POST['selected_value']);
+                echo "<script>console.log('" . $selected_value . "');</script>";
+                // Do something with $selected_value
+                // For example, save it to a database or use it in some way
+                
+                wp_send_json_success("Received value: " . $selected_value);
+            
+                wp_die(); // Required to terminate immediately and return a proper response
+            }
+            add_action('wp_ajax_process_selection', 'process_selection_callback');
+            add_action('wp_ajax_nopriv_process_selection', 'process_selection_callback');
+            
+        ?>
             <div class="custom-select">
-            <div class="select-box">Select an option</div>
-            <div class="options-container">
-                <div class="option">10件</div>
-                <div class="option">30件</div>
-                <div class="option">50件</div>
-            </div>
+                <div class="select-box" id="selectBox"`>Select an option</div>
+                <div class="options-container" id="optionsContainer">
+                    <div class="option">Option 1</div>
+                    <div class="option">Option 2</div>
+                    <div class="option">Option 3</div>
+                    <div class="option">Option 4</div>
+                </div>
             </div>
         </div>
 

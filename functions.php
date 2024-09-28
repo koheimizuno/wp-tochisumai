@@ -29,10 +29,9 @@ function my_script_init() {
   
   if(is_singular( 'land' ) || is_post_type_archive('land')){
     wp_enqueue_style("land", get_stylesheet_directory_uri() . "/css/land.min.css", array(), filemtime(get_stylesheet_directory() . "/css/land.min.css"));
+    wp_enqueue_script( 'land', get_stylesheet_directory_uri() . "/js/land.js", array(), filemtime(get_stylesheet_directory() . "/js/land.js"), true);
   }
-  // if((is_single() && has_category('media')) || is_category('media') || (is_archive() && has_category('media'))){
-  //   wp_enqueue_style("single", get_stylesheet_directory_uri() . "/css/single.css", array(), filemtime(get_stylesheet_directory() . "/css/single.css"));
-  // }
+
   if((is_single()) || is_category() || (is_archive())){
     wp_enqueue_style("single", get_stylesheet_directory_uri() . "/css/single.css", array(), filemtime(get_stylesheet_directory() . "/css/single.css"));
   }
@@ -109,7 +108,7 @@ function create_single_post($data) {
       
       $post_id = wp_insert_post($post_data);
       
-      if ($post_id) {
+      if ($post_id && !is_wp_error($post_id)) {
           // Add featured image (thumbnail)
         //   $thumbnail_url = $data['thumbnail_img']; // URL to the image
         //   $thumbnail_id = upload_image_to_media_library($thumbnail_url, $post_id);   // Upload the image and get its ID
@@ -152,7 +151,10 @@ function create_single_post($data) {
           update_post_meta($post_id, 'surround_area', $data['surround_area'], true);
           update_post_meta($post_id, 'map_embed_url', $data['map_embed_url'], true);
           
-      }
+          return array('success' => true, 'post_id' => $post_id, 'message' => 'Post created successfully.');
+      }else {
+        return array('success' => false, 'message' => 'Failed to create post.');
+    }
   }
 }
 
@@ -544,7 +546,7 @@ function insert_into_land_links_table($link_group) {
     $table_name = $wpdb->prefix . 'land_links'; // Get the table name with prefix
 
     if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") !== $table_name) {
-        return; // Exit if the table does not exist
+        return;
     }
 
     for ($i=count($link_group) - 1 ; $i >= 0 ; $i--) {
@@ -583,4 +585,32 @@ function create_specific_posts($start_pos, $end_pos) {
     }
 }
 
-// create_specific_posts(0, 10);
+// Schedule the event
+function my_schedule_event() {
+    // Check if the event is already scheduled
+    if (!wp_next_scheduled('daily_post')) {
+        // Schedule the event to run daily at 8 AM
+        wp_schedule_event(strtotime('21:35:00'), 'daily', 'daily_post');
+    }
+}
+add_action('wp', 'my_schedule_event');
+
+// // Hook the function to the scheduled event
+add_action('daily_post', 'daily_post_func');
+
+// daily_post_func
+function daily_post_func() {
+    global $wpdb;
+    $origin_link_group = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}land_links", ARRAY_A);
+    $new_link_group = get_link_group();
+    $add_links = [];
+    if(count($origin_link_group) < count($new_link_group)) {
+        for ($i=0; $i < count($new_link_group) - count($origin_link_group); $i++) { 
+            $add_links[] = $new_link_group[$i];
+        }
+        for ($i=count($add_links) -1 ; $i >= 0; $i--) {
+            create_single_post(scrapy_single_page($add_links[$i], count($new_link_group)));
+        }
+        insert_into_land_links_table($add_links);
+    }
+}

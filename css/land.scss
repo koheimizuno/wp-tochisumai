@@ -81,41 +81,55 @@ ul {
       }
     }
   }
+  $select-bg-color: #f0f0f0;
+  $select-border-color: #ccc;
+  $hover-bg-color: #f0f0f0;
+  $select-width: 200px;
+
   .custom-select {
     position: relative;
-    width: 170px;
+    width: $select-width;
+    font-family: Arial, sans-serif;
 
     .select-box {
       background-color: #fff;
-      border: 1px solid #ccc;
       padding: 10px;
-      border-radius: 5px;
       cursor: pointer;
+      position: relative;
+      color: #333;
+
+      &:after {
+        content: "▼";
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
     }
 
     .options-container {
-      display: none; /* Hidden by default */
+      display: none;
       position: absolute;
-      background-color: #fff;
-      border: 1px solid #ccc;
+      background-color: white;
+      border: 1px solid $select-border-color;
       width: 100%;
-      border-radius: 5px;
-      z-index: 1;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 10;
+      color: #333;
 
       .option {
         padding: 10px;
         cursor: pointer;
 
         &:hover {
-          background-color: #ddd;
+          background-color: $hover-bg-color;
         }
       }
     }
 
-    &.active {
-      .options-container {
-        display: block;
-      }
+    .select-active {
+      display: block;
     }
   }
 }
