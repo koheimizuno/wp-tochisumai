@@ -56,77 +56,126 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
     <?php do_action('lightning_site_body_prepend', 'lightning_site_body_prepend'); ?>
     <div class="<?php lightning_the_class_name('site-body-container'); ?> container">
 
+        <div class="sec-search">
+            <div class="sec-search-title-wrapper">
+                <p class="sec-search-title">条件で絞り込む</p>
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/land/close.png" alt="close">
+            </div>
+            <div class="sec-search-content"></div>
+        </div>
+
         <div class="perpagesortsec">
             <div class="itemSelect">
                 <label for="listrows">表示件数</label>
-                <select name="listrows" id="listrows">
-                    <option value="10">10件</option>
-                    <option value="30" selected="">30件</option>
-                    <option value="50">50件</option>
-                </select>
+                <div class="custom-select" id="listrows">
+                    <div class="select-box" id="selectBox1"><?php echo (isset($_GET['listrows']) && $_GET['listrows']) ? $_GET['listrows'] . '件' : "表示件数"; ?></div>
+                    <div class="options-container" id="optionsContainer1">
+                    <div class="option <?php echo (isset($_GET['listrows']) && $_GET['listrows'] == 2) ? 'active-option' : ''; ?>" data-value="2">2件</div>
+                    <div class="option <?php echo (isset($_GET['listrows']) && $_GET['listrows'] == 3) ? 'active-option' : ''; ?>" data-value="3">3件</div>
+                    <div class="option <?php echo (isset($_GET['listrows']) && $_GET['listrows'] == 4) ? 'active-option' : ''; ?>" data-value="4">4件</div>
+                    </div>
+                </div>
             </div>
             <div class="itemSelect">
                 <label for="order">並び替え</label>
-                <select name="order" id="order">
-                    <option value="modified_DESC" selected="">新着順</option>
-                    <option value="price_ASC">価格が安い</option>
-                    <option value="price_DESC">価格が高い</option>
-                    <option value="land_DESC">土地面積が広い</option>
-                    <option value="land_ASC">土地面積が狭い</option>
-                </select>
-            </div>
-        <?php
-            function enqueue_custom_scripts() {
-                wp_enqueue_script('custom-land-script', get_stylesheet_directory_uri() . '/js/land.js', array('jquery'), null, true);
-                
-                wp_localize_script('custom-land-script', 'ajax_object', array(
-                    'ajax_url' => admin_url('admin-ajax.php'),
-                    'nonce'    => wp_create_nonce('process_selection_nonce'),
-                ));
-            }
-            add_action('wp_enqueue_scripts', 'enqueue_custom_scripts');
-            
-            function process_selection_callback() {
-                check_ajax_referer('process_selection_nonce', 'security');
-            
-                $selected_value = sanitize_text_field($_POST['selected_value']);
-                echo "<script>console.log('" . $selected_value . "');</script>";
-                // Do something with $selected_value
-                // For example, save it to a database or use it in some way
-                
-                wp_send_json_success("Received value: " . $selected_value);
-            
-                wp_die(); // Required to terminate immediately and return a proper response
-            }
-            add_action('wp_ajax_process_selection', 'process_selection_callback');
-            add_action('wp_ajax_nopriv_process_selection', 'process_selection_callback');
-            
-        ?>
-            <div class="custom-select">
-                <div class="select-box" id="selectBox"`>Select an option</div>
-                <div class="options-container" id="optionsContainer">
-                    <div class="option">Option 1</div>
-                    <div class="option">Option 2</div>
-                    <div class="option">Option 3</div>
-                    <div class="option">Option 4</div>
+                <div class="custom-select" id="sort">
+                    <?php
+                        function get_sort_options_str($sort) {
+                            switch ($sort) {
+                                case "modified_DESC":
+                                    return "新着順";
+                                case "price_ASC":
+                                    return "価格が安い";
+                                case "price_DESC":
+                                    return "価格が高い";
+                                case "land_DESC":
+                                    return "土地面積が広い";
+                                case "land_ASC":
+                                    return "土地面積が狭い";
+                            }
+                        }
+                    ?>
+                    <div class="select-box" id="selectBox1"><?php echo (isset($_GET['sort']) && $_GET['sort']) ? get_sort_options_str($_GET['sort']) : "新着順"; ?></div>
+                    <div class="options-container" id="optionsContainer1">
+                        <div class="option <?php echo (isset($_GET['sort']) && $_GET['sort'] == "modified_DESC") ? 'active-option' : ''; ?>" data-value="modified_DESC">新着順</div>
+                        <div class="option <?php echo (isset($_GET['sort']) && $_GET['sort'] == "price_ASC") ? 'active-option' : ''; ?>" data-value="price_ASC">価格が安い</div>
+                        <div class="option <?php echo (isset($_GET['sort']) && $_GET['sort'] == "price_DESC") ? 'active-option' : ''; ?>" data-value="price_DESC">価格が高い</div>
+                        <div class="option <?php echo (isset($_GET['sort']) && $_GET['sort'] == "land_DESC") ? 'active-option' : ''; ?>" data-value="land_DESC">土地面積が広い</div>
+                        <div class="option <?php echo (isset($_GET['sort']) && $_GET['sort'] == "land_ASC") ? 'active-option' : ''; ?>" data-value="land_ASC">土地面積が狭い</div>
+                    </div>
                 </div>
-            </div>
+            </div>            
         </div>
 
         <?php
         // Define how many posts you want per page
-        $posts_per_page = 2;
+        $posts_per_page = isset($_GET['listrows']) ? intval($_GET['listrows']) : 3;
 
         // Get the current page number
         $paged = isset($_GET['pager']) ? intval($_GET['pager']) : 1;
 
-        // Custom query to fetch the latest 6 "News" posts
+        $query_sort = isset($_GET['sort']) ? $_GET['sort'] : "modified_DESC";
+
+        $sort_meta_key = '';
+        $sort_order = '';
+        $sort_orderby = [];
+
+        switch ($query_sort) {
+            case 'price_ASC':
+                $sort_meta_key = "min_price";
+                $sort_orderby = array(
+                    'meta_value_num' => 'ASC',
+                    'date' => 'DESC',
+                );
+                $sort_order = null;
+                break;
+            case 'price_DESC':
+                $sort_meta_key = "max_price";
+                $sort_orderby = array(
+                    'meta_value_num' => 'DESC',
+                    'date' => 'DESC',
+                );
+                $sort_order = null;
+                break;
+            case 'land_DESC':
+                $sort_meta_key = "min_area";
+                $sort_orderby = array(
+                    'meta_value_num' => 'DESC',
+                    'date' => 'DESC',
+                );
+                $sort_order = null;
+                break;
+            case 'land_ASC':
+                $sort_meta_key = "max_area";
+                $sort_orderby = array(
+                    'meta_value_num' => 'ASC',
+                    'date' => 'DESC',
+                );
+                $sort_order = null;
+                break;
+            default:
+                $sort_meta_key = null;
+                $sort_orderby = 'date';
+                $sort_order = 'DESC';
+                break;
+        }
+
         $args = array(
-            'post_type' => 'land', // Custom post type for 'news'
-            'posts_per_page' => $posts_per_page,  // Limit to 6 posts
-            'orderby' => 'date',    // Order by date
-            'order' => 'DESC', //ASC or DESC
-            'paged' => $paged, // Add the current page number to the query
+            'post_type' => 'land',
+            'posts_per_page' => -1,
+            'meta_key' => "",
+            'paged' => $paged,
+            'meta_key' => $sort_meta_key,
+            'orderby' => $sort_orderby,
+            'order' => $sort_order,
+            // 'meta_query' => array(
+            //     array(
+            //         'key' => 'subtitle',
+            //         'value' => '菅谷東小',
+            //         'compare' => 'LIKE',
+            //         'type' => 'CHAR' 
+            //     ),
+            // ),
         );
 
         $land_query = new WP_Query($args);
@@ -165,13 +214,13 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
                         <?php echo get_post_meta(get_the_ID(), 'address', true); ?>
                     </p>
                     <div class="land-pricearea">
-                        <span class="min-price"><?php echo get_post_meta(get_the_ID(), 'minmax_price', true)['min']; ?></span>
+                        <span class="min-price"><?php echo number_format(get_post_meta(get_the_ID(), 'min_price', true)); ?></span>
                         <?php
-                        $max_price = get_post_meta(get_the_ID(), 'minmax_price', true)['max'];
-                        if ($max_price !== null) {
+                        $max_price = get_post_meta(get_the_ID(), 'max_price', true);
+                        if ($max_price !== "") {
                             echo '
                                 <span class="max-price">
-                                '. $max_price .'
+                                '. (is_numeric($max_price) ? number_format((float)$max_price) : '') .'
                                 </span>
                             ';
                         }

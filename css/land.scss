@@ -35,6 +35,71 @@ ul {
   width: 100%;
 }
 
+.custom-select {
+  position: relative;
+  width: 170px;
+  font-family: Arial, sans-serif;
+
+  .select-box {
+    background-color: #fff;
+    padding: 10px;
+    cursor: pointer;
+    position: relative;
+    color: #333;
+    &:after {
+      content: "▼";
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  .options-container {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #555;
+    width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 10;
+    color: #333;
+
+    .option {
+      padding: 10px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #f0f0f0;
+      }
+
+      &.active-option {
+        background-color: #d3d3d3;
+      }
+    }
+  }
+
+  .select-open {
+    display: block;
+  }
+}
+
+.sec-search {
+  .sec-search-title-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #555;
+    padding: 20px 30px;
+    border: 1px #fff solid;
+    .sec-search-title {
+      font-size: 20px;
+      font-weight: bold;
+    }
+  }
+}
+
 .perpagesortsec {
   display: flex;
   justify-content: flex-end;
@@ -60,76 +125,6 @@ ul {
     }
     > label {
       white-space: nowrap;
-    }
-    select {
-      width: 170px;
-      background-color: #fff;
-      border: 1px #ccc solid;
-      border-radius: 5px;
-      margin: 0;
-      cursor: pointer;
-      @media screen and (max-width: $small-screen) {
-        width: 100%;
-      }
-      option {
-        display: inline-block;
-        padding: 10px;
-        cursor: pointer;
-        &:hover {
-          background-color: #ddd;
-        }
-      }
-    }
-  }
-  $select-bg-color: #f0f0f0;
-  $select-border-color: #ccc;
-  $hover-bg-color: #f0f0f0;
-  $select-width: 200px;
-
-  .custom-select {
-    position: relative;
-    width: $select-width;
-    font-family: Arial, sans-serif;
-
-    .select-box {
-      background-color: #fff;
-      padding: 10px;
-      cursor: pointer;
-      position: relative;
-      color: #333;
-
-      &:after {
-        content: "▼";
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-    }
-
-    .options-container {
-      display: none;
-      position: absolute;
-      background-color: white;
-      border: 1px solid $select-border-color;
-      width: 100%;
-      max-height: 200px;
-      overflow-y: auto;
-      z-index: 10;
-      color: #333;
-
-      .option {
-        padding: 10px;
-        cursor: pointer;
-
-        &:hover {
-          background-color: $hover-bg-color;
-        }
-      }
-    }
-
-    .select-active {
-      display: block;
     }
   }
 }
@@ -371,6 +366,7 @@ h2.land-title {
       align-items: center;
       justify-content: center;
       background-color: #555;
+      cursor: grab;
     }
   }
 
@@ -383,7 +379,7 @@ h2.land-title {
       height: 100px;
       opacity: 0.4;
       transition: opacity 0.3s;
-
+      cursor: pointer;
       &.swiper-slide-thumb-active {
         opacity: 1; // Active thumbnail gets full opacity
       }

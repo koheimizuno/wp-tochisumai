@@ -23,55 +23,66 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-const selectBox = document.getElementById("selectBox");
-const optionsContainer = document.getElementById("optionsContainer");
-const options = document.querySelectorAll(".option");
+// JavaScript for handling multiple custom select elements
 
-selectBox.addEventListener("click", () => {
-  optionsContainer.classList.toggle("select-active");
-  console.log("click");
-});
-var ajax_object = {
-  ajax_url: "http://localhost/tochisumai/wp-admin/admin-ajax.php",
-  nonce: "1234567890",
-};
-
-options.forEach((option) => {
-  option.addEventListener("click", () => {
-    selectBox.textContent = option.textContent;
-    optionsContainer.classList.remove("select-active");
-
-    const data = new FormData();
-    data.append("action", "process_selection");
-    data.append("selected_value", selectBox.textContent);
-    data.append("security", ajax_object.nonce);
-
-    fetch(ajax_object.ajax_url, {
-      method: "POST",
-      credentials: "same-origin",
-      body: data,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return response.text().then((text) => {
-            throw new Error(
-              `HTTP error! status: ${response.status}, body: ${text}`
-            );
-          });
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Success:", data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  });
-});
-
-document.addEventListener("click", (e) => {
-  if (!e.target.closest(".custom-select")) {
-    optionsContainer.classList.remove("select-active");
+// Function to initialize a custom select
+function initializeCustomSelect(selectElement) {
+  const selectBox = selectElement.querySelector(".select-box");
+  const optionsContainer = selectElement.querySelector(".options-container");
+  const options = selectElement.querySelectorAll(".option");
+  const selectId = selectElement.getAttribute("id");
+  // Remove active-option class from all options
+  function removeActiveClassFromOptions() {
+    options.forEach((option) => {
+      option.classList.remove("active-option");
+    });
   }
+
+  // Open and close the dropdown
+  selectBox.addEventListener("click", () => {
+    optionsContainer.classList.toggle("select-open");
+  });
+
+  // Add click listener to each option
+  options.forEach((option) => {
+    option.addEventListener("click", () => {
+      const selectedOption = option.textContent;
+      const optionValue = option.getAttribute("data-value");
+
+      // Set the selected option in the selectBox
+      selectBox.textContent = selectedOption;
+
+      // Remove 'active-option' class from all options
+      removeActiveClassFromOptions();
+
+      // Add 'active-option' class to the clicked option
+      option.classList.add("active-option");
+
+      // Close the options dropdown
+      optionsContainer.classList.remove("select-open");
+
+      // Get the current URL
+      let url = new URL(window.location.href);
+      // Create a new URLSearchParams object from the current query string
+      let params = new URLSearchParams(url.search);
+      // Add a new parameter or update an existing one
+      params.set(selectId, optionValue);
+      // Update the URL with the new query string
+      url.search = params.toString();
+      // Update the browser's address bar without reloading the page
+      window.location.href = url;
+    });
+  });
+
+  // Close options container when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".custom-select")) {
+      optionsContainer.classList.remove("select-open");
+    }
+  });
+}
+
+// Initialize each custom select dropdown
+document.querySelectorAll(".custom-select").forEach((selectElement) => {
+  initializeCustomSelect(selectElement);
 });
