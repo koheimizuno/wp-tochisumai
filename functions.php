@@ -70,6 +70,140 @@ add_image_size( 'top_event', 750, 600, true );
 
 // ------------------------------------------------------------------------------------------------------------------------------------------
 
+function get_city_from_id($id) {
+    
+}
+
+function get_area_from_id($id) {
+    switch ($id) {
+        case 0:
+            return "選択してください";
+            break;
+        case 1:
+            return "茨城県北エリア";
+            break;
+        case 2:
+            return "茨城県央エリア";
+            break;
+        case 3:
+            return "茨城県南エリア";
+            break;
+        case 4:
+            return "茨城県鹿行エリア";
+            break;
+        case 5:
+            return "茨城県西エリア";
+            break;
+        case 6:
+            return "栃木県北エリア";
+            break;
+        case 7:
+            return "栃木県央エリア";
+            break;
+        case 8:
+            return "栃木県南エリア";
+            break;
+        case 9:
+            return "千葉東葛エリア内";
+            break;
+        case 10:
+            return "千葉東葛エリア外";
+            break;
+        default:
+            break;
+    }
+}
+
+function area_from_query($query) {
+    $return_data = '';
+    switch ($query) {
+        case 1:
+            $return_data = '茨城県北エリア';
+            break;
+        case 2:
+            $return_data = '茨城県央エリア';
+            break;
+        case 3:
+            $return_data = '茨城県南エリア';
+            break;
+        case 4:
+            $return_data = '茨城県鹿行エリア';
+            break;
+        case 5:
+            $return_data = '茨城県西エリア';
+            break;
+        case 6:
+            $return_data = '栃木県北エリア';
+            break;
+        case 7:
+            $return_data = '栃木県央エリア';
+            break;
+        case 8:
+            $return_data = '栃木県南エリア';
+            break;
+        case 9:
+            $return_data = '千葉東葛エリア内';
+            break;
+        case 10:
+            $return_data = '千葉東葛エリア外';
+            break;
+        default:
+            $return_data = '選択してください';
+            break;
+    }
+    return $return_data;
+}
+
+function sort_from_query($query_sort) {
+    $sort_meta_key = '';
+    $sort_order = '';
+    $sort_orderby = [];
+    switch ($query_sort) {
+        case 'price_ASC':
+            $sort_meta_key = "min_price";
+            $sort_orderby = array(
+                'meta_value_num' => 'ASC',
+                'date' => 'DESC',
+            );
+            $sort_order = null;
+            break;
+        case 'price_DESC':
+            $sort_meta_key = "max_price";
+            $sort_orderby = array(
+                'meta_value_num' => 'DESC',
+                'date' => 'DESC',
+            );
+            $sort_order = null;
+            break;
+        case 'land_DESC':
+            $sort_meta_key = "min_area";
+            $sort_orderby = array(
+                'meta_value_num' => 'DESC',
+                'date' => 'DESC',
+            );
+            $sort_order = null;
+            break;
+        case 'land_ASC':
+            $sort_meta_key = "max_area";
+            $sort_orderby = array(
+                'meta_value_num' => 'ASC',
+                'date' => 'DESC',
+            );
+            $sort_order = null;
+            break;
+        default:
+            $sort_meta_key = null;
+            $sort_orderby = 'date';
+            $sort_order = 'DESC';
+            break;
+    }
+    return [
+        "sort_meta_key" => $sort_meta_key,
+        "sort_orderby" => $sort_orderby,
+        "sort_order" => $sort_order,
+    ];
+}
+
 function extract_slug($url) {
     if(strpos($url, '?')) {
         preg_match('/\/(\d+)\/\?/', $url, $matches);

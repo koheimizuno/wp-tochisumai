@@ -23,14 +23,13 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// JavaScript for handling multiple custom select elements
-
 // Function to initialize a custom select
 function initializeCustomSelect(selectElement) {
   const selectBox = selectElement.querySelector(".select-box");
   const optionsContainer = selectElement.querySelector(".options-container");
   const options = selectElement.querySelectorAll(".option");
   const selectId = selectElement.getAttribute("id");
+  const reload = selectElement.getAttribute("reload");
   // Remove active-option class from all options
   function removeActiveClassFromOptions() {
     options.forEach((option) => {
@@ -38,9 +37,23 @@ function initializeCustomSelect(selectElement) {
     });
   }
 
+  function closeOtherSelectBoxes(currentSelectElement) {
+    const allSelectElements = document.querySelectorAll(".custom-select");
+    allSelectElements.forEach((select) => {
+      if (select !== currentSelectElement) {
+        select
+          .querySelector(".options-container")
+          .classList.remove("select-open");
+        select.querySelector(".select-box").classList.remove("rotate180");
+      }
+    });
+  }
+
   // Open and close the dropdown
   selectBox.addEventListener("click", () => {
+    closeOtherSelectBoxes(selectElement);
     optionsContainer.classList.toggle("select-open");
+    selectBox.classList.toggle("rotate180");
   });
 
   // Add click listener to each option
@@ -60,6 +73,7 @@ function initializeCustomSelect(selectElement) {
 
       // Close the options dropdown
       optionsContainer.classList.remove("select-open");
+      selectBox.classList.remove("rotate180");
 
       // Get the current URL
       let url = new URL(window.location.href);
@@ -69,8 +83,18 @@ function initializeCustomSelect(selectElement) {
       params.set(selectId, optionValue);
       // Update the URL with the new query string
       url.search = params.toString();
-      // Update the browser's address bar without reloading the page
-      window.location.href = url;
+
+      if (reload == 1) {
+        window.location.href = url;
+      } else {
+        if (optionValue !== "all") {
+          window.history.pushState({}, "", url);
+        } else {
+          params.delete(selectId);
+          url.search = params.toString();
+          window.history.pushState({}, "", url);
+        }
+      }
     });
   });
 
@@ -78,6 +102,7 @@ function initializeCustomSelect(selectElement) {
   document.addEventListener("click", (e) => {
     if (!e.target.closest(".custom-select")) {
       optionsContainer.classList.remove("select-open");
+      selectBox.classList.remove("rotate180");
     }
   });
 }
@@ -85,4 +110,94 @@ function initializeCustomSelect(selectElement) {
 // Initialize each custom select dropdown
 document.querySelectorAll(".custom-select").forEach((selectElement) => {
   initializeCustomSelect(selectElement);
+});
+
+// Accordion
+const accordionHeaders = document.querySelectorAll(".sec-search-header");
+
+accordionHeaders.forEach((header) => {
+  header.addEventListener("click", () => {
+    const accordionItem = header.parentElement;
+    const isActive = accordionItem.classList.contains("accordion-active");
+
+    // Close all accordion items
+    document.querySelectorAll(".sec-search").forEach((item) => {
+      item.classList.remove("accordion-active");
+    });
+
+    // Toggle the clicked accordion item
+    if (!isActive) {
+      accordionItem.classList.add("accordion-active");
+    }
+  });
+});
+
+document.querySelector(".btn-search").addEventListener("click", () => {
+  window.location.reload();
+});
+// URL Query Clear
+document.querySelector(".btn-clear").addEventListener("click", () => {
+  let url = new URL(window.location.href);
+  url.search = "";
+  window.history.pushState({}, "", url);
+  window.location.reload();
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  const areaSelect = document.querySelector("#area");
+  const citySelect = document.querySelector("#city");
+  const areaOptions = areaSelect.querySelectorAll(".option");
+  const cityOptionsContainer = citySelect.querySelector(".options-container");
+  const citySelectBox = citySelect.querySelector(".select-box");
+
+  // Function to update city options based on selected area
+  function updateCityOptions(selectedArea) {
+    const cities = JSON.parse(selectedArea.getAttribute("data-cities") || "[]");
+    cityOptionsContainer.innerHTML = "";
+    citySelectBox.textContent = "選択してください";
+
+    cities.forEach((city, index) => {
+      const cityOption = document.createElement("div");
+      cityOption.classList.add("option");
+      cityOption.textContent = city;
+      cityOption.setAttribute("data-value", city);
+      cityOptionsContainer.appendChild(cityOption);
+
+      cityOption.addEventListener("click", function () {
+        citySelectBox.textContent = city;
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set("city", index);
+        window.history.pushState({}, "", currentUrl);
+
+        cityOptionsContainer.classList.remove("select-open");
+        citySelectBox.classList.remove("rotate180");
+      });
+    });
+  }
+
+  // Check for area in URL query and update city options accordingly
+  const urlParams = new URLSearchParams(window.location.search);
+  const areaParam = urlParams.get("area");
+  if (areaParam) {
+    const selectedArea = areaSelect.querySelector(
+      `.option[data-value="${areaParam}"]`
+    );
+    if (selectedArea) {
+      updateCityOptions(selectedArea);
+
+      const cityParam = urlParams.get("city");
+      if (cityParam) {
+        const cityOptions = cityOptionsContainer.querySelectorAll(".option");
+        if (cityOptions[cityParam]) {
+          citySelectBox.textContent = cityOptions[cityParam].textContent;
+        }
+      }
+    }
+  }
+
+  areaOptions.forEach((option) => {
+    option.addEventListener("click", function () {
+      updateCityOptions(this);
+    });
+  });
 });
