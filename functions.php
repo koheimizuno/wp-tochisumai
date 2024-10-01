@@ -71,7 +71,7 @@ add_image_size( 'top_event', 750, 600, true );
 // ------------------------------------------------------------------------------------------------------------------------------------------
 
 function get_city_from_id($id) {
-    
+
 }
 
 function get_area_from_id($id) {
@@ -686,6 +686,40 @@ function create_land_links_table() {
     }
 }
 
+function delete_land_links_table() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'land_links';
+
+    // Check if the table exists
+    if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") == $table_name) {
+        // SQL to drop the table
+        $sql = "DROP TABLE IF EXISTS $table_name";
+        $wpdb->query($sql);
+        return "The land_links table has been deleted.";
+    } else {
+        return "The land_links table does not exist.";
+    }
+}
+
+function get_land_links_data() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'land_links';
+    
+    // Check if the table exists
+    if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+        return array('error' => 'Table does not exist');
+    }
+    
+    // Retrieve all rows from the table
+    $results = $wpdb->get_results("SELECT * FROM $table_name", ARRAY_A);
+    
+    if(empty($results)) {
+        return array('message' => 'No data found in the table');
+    }
+    
+    return $results;
+}
+
 function insert_into_land_links_table($link_group) {
     global $wpdb;
     $table_name = $wpdb->prefix . 'land_links'; // Get the table name with prefix
@@ -711,6 +745,26 @@ function insert_into_land_links_table($link_group) {
     }
 }
 
+function delete_land_links_data() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'land_links';
+
+    // Check if the table exists
+    if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") == $table_name) {
+        // Delete all rows from the table
+        $wpdb->query("TRUNCATE TABLE $table_name");
+        return "All data deleted from the land_links table.";
+    } else {
+        return "The land_links table does not exist.";
+    }
+}
+
+
+// create_land_links_table();
+
+// insert_into_land_links_table(get_link_group());
+// die();
+
 function create_entire_posts() {
     global $wpdb;
     $results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}land_links", ARRAY_A);
@@ -730,7 +784,7 @@ function create_specific_posts($start_pos, $end_pos) {
     }
 }
 
-// create_specific_posts(0, 10);
+// create_specific_posts(107,109);
 
 // daily_post_func
 function daily_post_func() {

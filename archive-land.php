@@ -162,8 +162,8 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
                         </div>
                     </div>
                     <div class="itemSelect">
-                        <label for="area">エリア</label>
-                        <input type="text">
+                        <label for="freeword">フリーワード</label>
+                        <input type="text" id="freeword">
                     </div>
                     <div class="sm-row">
                         <label for="price-title" >土地面積</label>
@@ -233,9 +233,9 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
                 <div class="custom-select" id="listrows" reload="1">
                     <div class="select-box"><?php echo (isset($_GET['listrows']) && $_GET['listrows']) ? $_GET['listrows'] . '件' : "表示件数"; ?></div>
                     <div class="options-container">
-                        <div class="option <?php echo (isset($_GET['listrows']) && $_GET['listrows'] == 2) ? 'active-option' : ''; ?>" data-value="2">2件</div>
-                        <div class="option <?php echo (isset($_GET['listrows']) && $_GET['listrows'] == 3) ? 'active-option' : ''; ?>" data-value="3">3件</div>
-                        <div class="option <?php echo (isset($_GET['listrows']) && $_GET['listrows'] == 4) ? 'active-option' : ''; ?>" data-value="4">4件</div>
+                        <div class="option <?php echo (isset($_GET['listrows']) && $_GET['listrows'] == 10) ? 'active-option' : ''; ?>" data-value="10">10件</div>
+                        <div class="option <?php echo (isset($_GET['listrows']) && $_GET['listrows'] == 30) ? 'active-option' : ''; ?>" data-value="30">30件</div>
+                        <div class="option <?php echo (isset($_GET['listrows']) && $_GET['listrows'] == 50) ? 'active-option' : ''; ?>" data-value="50">50件</div>
                     </div>
                 </div>
             </div>
@@ -271,7 +271,7 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
         </div>
 
         <?php
-        $posts_per_page = isset($_GET['listrows']) ? intval($_GET['listrows']) : 3;
+        $posts_per_page = isset($_GET['listrows']) ? intval($_GET['listrows']) : 30;
         $paged = isset($_GET['pager']) ? intval($_GET['pager']) : 1;
 
         $query_sort = isset($_GET['sort']) ? $_GET['sort'] : "modified_DESC";
@@ -343,6 +343,7 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
         }
 
         $total_sections = 0;
+
         $all_posts = get_posts($args);
         foreach ($all_posts as $post) {
             $priceBox = get_post_meta($post->ID, 'priceBox', true);
@@ -352,6 +353,8 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
         }
 
         echo "<script>document.querySelector('.searchNum .num').textContent = '$total_sections';</script>";
+
+        $args['posts_per_page'] = $posts_per_page;
 
         $land_query = new WP_Query($args);
 

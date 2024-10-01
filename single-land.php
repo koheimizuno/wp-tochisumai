@@ -390,6 +390,15 @@ do_action( 'lightning_site_header_after', 'lightning_site_header_after' );
     </div>
 </div>
 
+<div class="land-form">
+    <div class="container">
+        <?php
+            echo do_shortcode('[mwform_formkey key="3431"]');
+        ?>
+    </div>
+</div>
+
+
 <?php if ( is_active_sidebar( 'footer-before-widget' ) ) : ?>
 <div class=" site-body-bottom">
     <div class="container">

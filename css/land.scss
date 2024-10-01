@@ -48,6 +48,7 @@ ul {
   }
   > label {
     white-space: nowrap;
+    font-size: 14px;
   }
 }
 
@@ -115,7 +116,7 @@ ul {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #555;
+    background-color: transparent;
     padding: 20px 30px;
     cursor: pointer;
     > p {
@@ -132,7 +133,7 @@ ul {
   .sec-search-content {
     padding: 0 30px;
     max-height: 0;
-    // overflow: hidden;
+    overflow: hidden;
     transition: max-height 0.3s ease;
   }
 
@@ -143,6 +144,7 @@ ul {
     .sec-search-content {
       max-height: 500px;
       padding: 20px 30px;
+      overflow: visible;
     }
 
     .icon {
@@ -195,6 +197,8 @@ ul {
       }
       input {
         outline: none;
+        border-radius: 0;
+        margin-bottom: 0;
       }
     }
 
