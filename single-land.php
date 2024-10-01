@@ -100,8 +100,8 @@ do_action( 'lightning_site_header_after', 'lightning_site_header_after' );
 
             <div class=" land-detail-price">
                 <p class="price-subTxt">販売価格</p>
-                <span class="price"><?php echo get_post_meta(get_the_ID(), 'minmax_price', true)['min']; ?></span>
-                <span class="price"><?php echo get_post_meta(get_the_ID(), 'minmax_price', true)['max']; ?></span>
+                <span class="price"><?php echo get_post_meta(get_the_ID(), 'min_price', true); ?></span>
+                <span class="price"><?php echo get_post_meta(get_the_ID(), 'max_price', true); ?></span>
                 <span class="priceTxt">万円</span>
             </div>
 
@@ -306,10 +306,10 @@ do_action( 'lightning_site_header_after', 'lightning_site_header_after' );
                     <h5>販売価格</h5>
                     <p class="land-pricearea">
                         <span>
-                            <?php echo get_post_meta(get_the_ID(), 'minmax_price', true)['min']; ?>
+                            <?php echo get_post_meta(get_the_ID(), 'min_price', true); ?>
                         </span>
                         ～
-                        <span><?php echo get_post_meta(get_the_ID(), 'minmax_price', true)['max']; ?></span>
+                        <span><?php echo get_post_meta(get_the_ID(), 'max_price', true); ?></span>
                         万円
                     </p>
                 </div>
@@ -389,6 +389,15 @@ do_action( 'lightning_site_header_after', 'lightning_site_header_after' );
         </dic>
     </div>
 </div>
+
+<div class="land-form">
+    <div class="container">
+        <?php
+            echo do_shortcode('[mwform_formkey key="3431"]');
+        ?>
+    </div>
+</div>
+
 
 <?php if ( is_active_sidebar( 'footer-before-widget' ) ) : ?>
 <div class=" site-body-bottom">

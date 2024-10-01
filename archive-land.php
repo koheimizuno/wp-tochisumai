@@ -56,81 +56,308 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
     <?php do_action('lightning_site_body_prepend', 'lightning_site_body_prepend'); ?>
     <div class="<?php lightning_the_class_name('site-body-container'); ?> container">
 
-        <div class="perpagesortsec">
-            <div class="itemSelect">
-                <label for="listrows">表示件数</label>
-                <select name="listrows" id="listrows">
-                    <option value="10">10件</option>
-                    <option value="30" selected="">30件</option>
-                    <option value="50">50件</option>
-                </select>
+        <div class="sec-search accordion-active">
+            <div class="sec-search-header">
+                <p>条件で絞り込む</p>
+                <span class="icon">+</span>
             </div>
-            <div class="itemSelect">
-                <label for="order">並び替え</label>
-                <select name="order" id="order">
-                    <option value="modified_DESC" selected="">新着順</option>
-                    <option value="price_ASC">価格が安い</option>
-                    <option value="price_DESC">価格が高い</option>
-                    <option value="land_DESC">土地面積が広い</option>
-                    <option value="land_ASC">土地面積が狭い</option>
-                </select>
-            </div>
-        <?php
-            function enqueue_custom_scripts() {
-                wp_enqueue_script('custom-land-script', get_stylesheet_directory_uri() . '/js/land.js', array('jquery'), null, true);
-                
-                wp_localize_script('custom-land-script', 'ajax_object', array(
-                    'ajax_url' => admin_url('admin-ajax.php'),
-                    'nonce'    => wp_create_nonce('process_selection_nonce'),
-                ));
-            }
-            add_action('wp_enqueue_scripts', 'enqueue_custom_scripts');
-            
-            function process_selection_callback() {
-                check_ajax_referer('process_selection_nonce', 'security');
-            
-                $selected_value = sanitize_text_field($_POST['selected_value']);
-                echo "<script>console.log('" . $selected_value . "');</script>";
-                // Do something with $selected_value
-                // For example, save it to a database or use it in some way
-                
-                wp_send_json_success("Received value: " . $selected_value);
-            
-                wp_die(); // Required to terminate immediately and return a proper response
-            }
-            add_action('wp_ajax_process_selection', 'process_selection_callback');
-            add_action('wp_ajax_nopriv_process_selection', 'process_selection_callback');
-            
-        ?>
-            <div class="custom-select">
-                <div class="select-box" id="selectBox"`>Select an option</div>
-                <div class="options-container" id="optionsContainer">
-                    <div class="option">Option 1</div>
-                    <div class="option">Option 2</div>
-                    <div class="option">Option 3</div>
-                    <div class="option">Option 4</div>
+            <div class="sec-search-content">
+                <div class="search-row">
+                    <div class="itemSelect">
+                        <label for="area">エリア</label>
+                        <div class="custom-select" id="area" reload="0">
+                            <div class="select-box">
+                                <?php echo (isset($_GET['area']) && $_GET['area']) ? area_from_query($_GET['area']) : "選択してください"; ?>
+                            </div>
+                            <div class="options-container">
+                                <?php
+                                    $json_file = file_get_contents(get_stylesheet_directory() . '/js/address.json');
+                                    $address_data = json_decode($json_file, true);
+                                ?>
+                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 0) ? 'active-option' : ''; ?>" data-value="all" data-cities="<?php echo htmlspecialchars(json_encode($address_data['選択してください']), ENT_QUOTES, 'UTF-8'); ?>">選択してください</div>
+                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 1) ? 'active-option' : ''; ?>" data-value="1" data-cities="<?php echo htmlspecialchars(json_encode($address_data['茨城県北エリア']), ENT_QUOTES, 'UTF-8'); ?>">茨城県北エリア</div>
+                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 2) ? 'active-option' : ''; ?>" data-value="2" data-cities="<?php echo htmlspecialchars(json_encode($address_data['茨城県央エリア']), ENT_QUOTES, 'UTF-8'); ?>">茨城県央エリア</div>
+                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 3) ? 'active-option' : ''; ?>" data-value="3" data-cities="<?php echo htmlspecialchars(json_encode($address_data['茨城県南エリア']), ENT_QUOTES, 'UTF-8'); ?>">茨城県南エリア</div>
+                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 4) ? 'active-option' : ''; ?>" data-value="4" data-cities="<?php echo htmlspecialchars(json_encode($address_data['茨城県鹿行エリア']), ENT_QUOTES, 'UTF-8'); ?>">茨城県鹿行エリア</div>
+                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 5) ? 'active-option' : ''; ?>" data-value="5" data-cities="<?php echo htmlspecialchars(json_encode($address_data['茨城県西エリア']), ENT_QUOTES, 'UTF-8'); ?>">茨城県西エリア</div>
+                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 6) ? 'active-option' : ''; ?>" data-value="6" data-cities="<?php echo htmlspecialchars(json_encode($address_data['栃木県北エリア']), ENT_QUOTES, 'UTF-8'); ?>">栃木県北エリア</div>
+                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 7) ? 'active-option' : ''; ?>" data-value="7" data-cities="<?php echo htmlspecialchars(json_encode($address_data['栃木県央エリア']), ENT_QUOTES, 'UTF-8'); ?>">栃木県央エリア</div>
+                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 8) ? 'active-option' : ''; ?>" data-value="8" data-cities="<?php echo htmlspecialchars(json_encode($address_data['栃木県南エリア']), ENT_QUOTES, 'UTF-8'); ?>">栃木県南エリア</div>
+                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 9) ? 'active-option' : ''; ?>" data-value="9" data-cities="<?php echo htmlspecialchars(json_encode($address_data['千葉東葛エリア内']), ENT_QUOTES, 'UTF-8'); ?>">千葉東葛エリア内</div>
+                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 10) ? 'active-option' : ''; ?>" data-value="10" data-cities="<?php echo htmlspecialchars(json_encode($address_data['千葉東葛エリア外']), ENT_QUOTES, 'UTF-8'); ?>">千葉東葛エリア外</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="itemSelect">
+                        <label for="city">市区町村</label>
+                        <div class="custom-select" id="city" reload="0">
+                            <div class="select-box">
+                                <?php
+                                    echo isset($_GET['area']) ? $address_data['選択してください'][intval($_GET['city'])] : "選択してください";
+                                ?>
+                            </div>
+                            <div class="options-container">
+                                <?php foreach ($address_data['選択してください'] as $key => $city) : ?>
+                                    <div class="option <?php echo (isset($_GET['city']) && $_GET['city'] == $key) ? 'active-option' : ''; ?>" data-value="<?php echo $key === 0 ? "all" : $key; ?>"><?php echo $city; ?></div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sm-row">
+                        <label for="price-title" >価格</label>
+                        <div class="price-range-row">
+                            <div class="itemSelect">
+                                <div class="custom-select" id="price_min" reload="0">
+                                    <div class="select-box"><?php echo (isset($_GET['price_min']) && $_GET['price_min']) ? $_GET['price_min'] . '万円' : "下限なし"; ?></div>
+                                    <div class="options-container">
+                                        <div class="option" data-value="all">下限なし</div>
+                                        <div class="option <?php echo (isset($_GET['price_min']) && $_GET['price_min'] == 1000) ? 'active-option' : ''; ?>" data-value="1000">1,000万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_min']) && $_GET['price_min'] == 1500) ? 'active-option' : ''; ?>" data-value="1500">1,500万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_min']) && $_GET['price_min'] == 2000) ? 'active-option' : ''; ?>" data-value="2000">2,000万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_min']) && $_GET['price_min'] == 2500) ? 'active-option' : ''; ?>" data-value="2500">2,500万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_min']) && $_GET['price_min'] == 3000) ? 'active-option' : ''; ?>" data-value="3000">3,000万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_min']) && $_GET['price_min'] == 3500) ? 'active-option' : ''; ?>" data-value="3500">3,500万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_min']) && $_GET['price_min'] == 4000) ? 'active-option' : ''; ?>" data-value="4000">4,000万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_min']) && $_GET['price_min'] == 4500) ? 'active-option' : ''; ?>" data-value="4500">4,500万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_min']) && $_GET['price_min'] == 5000) ? 'active-option' : ''; ?>" data-value="5000">5,000万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_min']) && $_GET['price_min'] == 5500) ? 'active-option' : ''; ?>" data-value="5500">5,500万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_min']) && $_GET['price_min'] == 6000) ? 'active-option' : ''; ?>" data-value="6000">6,000万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_min']) && $_GET['price_min'] == 6500) ? 'active-option' : ''; ?>" data-value="6500">6,500万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_min']) && $_GET['price_min'] == 7000) ? 'active-option' : ''; ?>" data-value="7000">7,000万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_min']) && $_GET['price_min'] == 7500) ? 'active-option' : ''; ?>" data-value="7500">7,500万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_min']) && $_GET['price_min'] == 8000) ? 'active-option' : ''; ?>" data-value="8000">8,000万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_min']) && $_GET['price_min'] == 8500) ? 'active-option' : ''; ?>" data-value="8500">8,500万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_min']) && $_GET['price_min'] == 9000) ? 'active-option' : ''; ?>" data-value="9000">9,000万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_min']) && $_GET['price_min'] == 9500) ? 'active-option' : ''; ?>" data-value="9500">9,500万円</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <span>~</span>
+                            <div class="itemSelect">
+                                <div class="custom-select" id="price_max" reload="0">
+                                    <div class="select-box"><?php echo (isset($_GET['price_max']) && $_GET['price_max']) ? $_GET['price_max'] . '万円' : "上限なし"; ?></div>
+                                    <div class="options-container">
+                                        <div class="option" data-value="all">上限なし</div>
+                                        <div class="option <?php echo (isset($_GET['price_max']) && $_GET['price_max'] == 1000) ? 'active-option' : ''; ?>" data-value="1000">1,000万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_max']) && $_GET['price_max'] == 1500) ? 'active-option' : ''; ?>" data-value="1500">1,500万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_max']) && $_GET['price_max'] == 2000) ? 'active-option' : ''; ?>" data-value="2000">2,000万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_max']) && $_GET['price_max'] == 2500) ? 'active-option' : ''; ?>" data-value="2500">2,500万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_max']) && $_GET['price_max'] == 3000) ? 'active-option' : ''; ?>" data-value="3000">3,000万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_max']) && $_GET['price_max'] == 3500) ? 'active-option' : ''; ?>" data-value="3500">3,500万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_max']) && $_GET['price_max'] == 4000) ? 'active-option' : ''; ?>" data-value="4000">4,000万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_max']) && $_GET['price_max'] == 4500) ? 'active-option' : ''; ?>" data-value="4500">4,500万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_max']) && $_GET['price_max'] == 5000) ? 'active-option' : ''; ?>" data-value="5000">5,000万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_max']) && $_GET['price_max'] == 5500) ? 'active-option' : ''; ?>" data-value="5500">5,500万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_max']) && $_GET['price_max'] == 6000) ? 'active-option' : ''; ?>" data-value="6000">6,000万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_max']) && $_GET['price_max'] == 6500) ? 'active-option' : ''; ?>" data-value="6500">6,500万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_max']) && $_GET['price_max'] == 7000) ? 'active-option' : ''; ?>" data-value="7000">7,000万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_max']) && $_GET['price_max'] == 7500) ? 'active-option' : ''; ?>" data-value="7500">7,500万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_max']) && $_GET['price_max'] == 8000) ? 'active-option' : ''; ?>" data-value="8000">8,000万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_max']) && $_GET['price_max'] == 8500) ? 'active-option' : ''; ?>" data-value="8500">8,500万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_max']) && $_GET['price_max'] == 9000) ? 'active-option' : ''; ?>" data-value="9000">9,000万円</div>
+                                        <div class="option <?php echo (isset($_GET['price_max']) && $_GET['price_max'] == 9500) ? 'active-option' : ''; ?>" data-value="9500">9,500万円</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="itemSelect">
+                        <label for="freeword">フリーワード</label>
+                        <input type="text" id="freeword">
+                    </div>
+                    <div class="sm-row">
+                        <label for="price-title" >土地面積</label>
+                        <div class="price-range-row">
+                            <div class="itemSelect">
+                                <div class="custom-select" id="land_area_min" reload="0">
+                                    <div class="select-box"><?php echo (isset($_GET['land_area_min']) && $_GET['land_area_min']) ? $_GET['land_area_min'] . 'm²' : "下限なし"; ?></div>
+                                    <div class="options-container">
+                                        <div class="option" data-value="all">下限なし</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_min']) && $_GET['land_area_min'] == 50) ? 'active-option' : ''; ?>" data-value="50">50m²</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_min']) && $_GET['land_area_min'] == 60) ? 'active-option' : ''; ?>" data-value="60">60m²</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_min']) && $_GET['land_area_min'] == 70) ? 'active-option' : ''; ?>" data-value="70">70m²</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_min']) && $_GET['land_area_min'] == 80) ? 'active-option' : ''; ?>" data-value="80">80m²</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_min']) && $_GET['land_area_min'] == 90) ? 'active-option' : ''; ?>" data-value="90">90m²</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_min']) && $_GET['land_area_min'] == 100) ? 'active-option' : ''; ?>" data-value="100">100m²</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_min']) && $_GET['land_area_min'] == 110) ? 'active-option' : ''; ?>" data-value="110">110m²</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_min']) && $_GET['land_area_min'] == 120) ? 'active-option' : ''; ?>" data-value="120">120m²</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_min']) && $_GET['land_area_min'] == 150) ? 'active-option' : ''; ?>" data-value="150">150m²</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_min']) && $_GET['land_area_min'] == 180) ? 'active-option' : ''; ?>" data-value="180">180m²</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_min']) && $_GET['land_area_min'] == 200) ? 'active-option' : ''; ?>" data-value="200">200m²</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <span>~</span>
+                            <div class="itemSelect">
+                                <div class="custom-select" id="land_area_max" reload="0">
+                                    <div class="select-box"><?php echo (isset($_GET['land_area_max']) && $_GET['land_area_max']) ? $_GET['land_area_max'] . 'm²' : "上限なし"; ?></div>
+                                    <div class="options-container">
+                                        <div class="option" data-value="all">上限なし</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_max']) && $_GET['land_area_max'] == 50) ? 'active-option' : ''; ?>" data-value="50">50m²</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_max']) && $_GET['land_area_max'] == 60) ? 'active-option' : ''; ?>" data-value="60">60m²</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_max']) && $_GET['land_area_max'] == 70) ? 'active-option' : ''; ?>" data-value="70">70m²</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_max']) && $_GET['land_area_max'] == 80) ? 'active-option' : ''; ?>" data-value="80">80m²</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_max']) && $_GET['land_area_max'] == 90) ? 'active-option' : ''; ?>" data-value="90">90m²</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_max']) && $_GET['land_area_max'] == 100) ? 'active-option' : ''; ?>" data-value="100">100m²</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_max']) && $_GET['land_area_max'] == 110) ? 'active-option' : ''; ?>" data-value="110">110m²</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_max']) && $_GET['land_area_max'] == 120) ? 'active-option' : ''; ?>" data-value="120">120m²</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_max']) && $_GET['land_area_max'] == 150) ? 'active-option' : ''; ?>" data-value="150">150m²</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_max']) && $_GET['land_area_max'] == 180) ? 'active-option' : ''; ?>" data-value="180">180m²</div>
+                                        <div class="option <?php echo (isset($_GET['land_area_max']) && $_GET['land_area_max'] == 200) ? 'active-option' : ''; ?>" data-value="200">200m²</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        <div>
+            <div class="btn-wrapper">
+                <button class="btn-search">この条件で検索する</button>
+                <button class="btn-clear">
+                    検索条件をクリア
+                </button>
+            </div>
+            <div class="searchNum">
+                <p class="txtNum">
+                    <span class="num"></span>
+                    区画の物件情報が見つかりました。<br class="brSp">
+                </p>
+            </div>
+        </div>
+
+        <div class="perpagesortsec">
+            <div class="itemSelect">
+                <label for="listrows">表示件数</label>
+                <div class="custom-select" id="listrows" reload="1">
+                    <div class="select-box"><?php echo (isset($_GET['listrows']) && $_GET['listrows']) ? $_GET['listrows'] . '件' : "表示件数"; ?></div>
+                    <div class="options-container">
+                        <div class="option <?php echo (isset($_GET['listrows']) && $_GET['listrows'] == 10) ? 'active-option' : ''; ?>" data-value="10">10件</div>
+                        <div class="option <?php echo (isset($_GET['listrows']) && $_GET['listrows'] == 30) ? 'active-option' : ''; ?>" data-value="30">30件</div>
+                        <div class="option <?php echo (isset($_GET['listrows']) && $_GET['listrows'] == 50) ? 'active-option' : ''; ?>" data-value="50">50件</div>
+                    </div>
+                </div>
+            </div>
+            <div class="itemSelect">
+                <label for="order">並び替え</label>
+                <div class="custom-select" id="sort" reload="1">
+                    <?php
+                        function get_sort_options_str($sort) {
+                            switch ($sort) {
+                                case "modified_DESC":
+                                    return "新着順";
+                                case "price_ASC":
+                                    return "価格が安い";
+                                case "price_DESC":
+                                    return "価格が高い";
+                                case "land_DESC":
+                                    return "土地面積が広い";
+                                case "land_ASC":
+                                    return "土地面積が狭い";
+                            }
+                        }
+                    ?>
+                    <div class="select-box"><?php echo (isset($_GET['sort']) && $_GET['sort']) ? get_sort_options_str($_GET['sort']) : "新着順"; ?></div>
+                    <div class="options-container">
+                        <div class="option <?php echo (isset($_GET['sort']) && $_GET['sort'] == "modified_DESC") ? 'active-option' : ''; ?>" data-value="modified_DESC">新着順</div>
+                        <div class="option <?php echo (isset($_GET['sort']) && $_GET['sort'] == "price_ASC") ? 'active-option' : ''; ?>" data-value="price_ASC">価格が安い</div>
+                        <div class="option <?php echo (isset($_GET['sort']) && $_GET['sort'] == "price_DESC") ? 'active-option' : ''; ?>" data-value="price_DESC">価格が高い</div>
+                        <div class="option <?php echo (isset($_GET['sort']) && $_GET['sort'] == "land_DESC") ? 'active-option' : ''; ?>" data-value="land_DESC">土地面積が広い</div>
+                        <div class="option <?php echo (isset($_GET['sort']) && $_GET['sort'] == "land_ASC") ? 'active-option' : ''; ?>" data-value="land_ASC">土地面積が狭い</div>
+                    </div>
+                </div>
+            </div>            
+        </div>
 
         <?php
-        // Define how many posts you want per page
-        $posts_per_page = 2;
-
-        // Get the current page number
+        $posts_per_page = isset($_GET['listrows']) ? intval($_GET['listrows']) : 30;
         $paged = isset($_GET['pager']) ? intval($_GET['pager']) : 1;
 
-        // Custom query to fetch the latest 6 "News" posts
+        $query_sort = isset($_GET['sort']) ? $_GET['sort'] : "modified_DESC";
+        $sort = sort_from_query($query_sort);
+
+        $area_query = isset($_GET['area']) ? intval($_GET['area']) : null;
+        $city_query = isset($_GET['city']) ? intval($_GET['city']) : null;
+
+        $city = isset($address_data[get_area_from_id($area_query)][$city_query]) ? $address_data[get_area_from_id($area_query)][$city_query] : null;
+        
+        $price_min = isset($_GET['price_min']) ? intval($_GET['price_min']) : null;
+        $price_max = isset($_GET['price_max']) ? intval($_GET['price_max']) : null;
+        $land_area_min = isset($_GET['land_area_min']) ? intval($_GET['land_area_min']) : null;
+        $land_area_max = isset($_GET['land_area_max']) ? intval($_GET['land_area_max']) : null;
+
         $args = array(
-            'post_type' => 'land', // Custom post type for 'news'
-            'posts_per_page' => $posts_per_page,  // Limit to 6 posts
-            'orderby' => 'date',    // Order by date
-            'order' => 'DESC', //ASC or DESC
-            'paged' => $paged, // Add the current page number to the query
+            'post_type' => 'land',
+            'posts_per_page' => -1,
+            'paged' => $paged,
+            'meta_key' => $sort['sort_meta_key'],
+            'orderby' => $sort['sort_orderby'],
+            'order' => $sort['sort_order'],
+            'meta_query' => array()
         );
 
+        if ($price_min !== null) {
+            $args['meta_query'][] = array(
+                'key' => 'min_price',
+                'value' => $price_min,
+                'compare' => '>=',
+                'type' => 'NUMERIC'
+            );
+        }
+
+        if ($price_max !== null) {
+            $args['meta_query'][] = array(
+                'key' => 'max_price',
+                'value' => $price_max,
+                'compare' => '<=',
+                'type' => 'NUMERIC'
+            );
+        }
+
+        if ($land_area_min !== null) {
+            $args['meta_query'][] = array(
+                'key' => 'min_area',
+                'value' => $land_area_min,
+                'compare' => '>=',
+                'type' => 'NUMERIC'
+            );
+        }
+
+        if ($land_area_max !== null) {
+            $args['meta_query'][] = array(
+                'key' => 'max_area',
+                'value' => $land_area_max,
+                'compare' => '<=',
+                'type' => 'NUMERIC'
+            );
+        }
+
+        if ($city !== null) {
+            $args['meta_query'][] = array(
+                'key' => 'address',
+                'value' => $city === "選択してください" ? null : $city,
+                'compare' => 'LIKE',
+                'type' => 'CHAR'
+            );
+        }
+
+        $total_sections = 0;
+
+        $all_posts = get_posts($args);
+        foreach ($all_posts as $post) {
+            $priceBox = get_post_meta($post->ID, 'priceBox', true);
+            if (is_array($priceBox)) {
+                $total_sections += count($priceBox);
+            }
+        }
+
+        echo "<script>document.querySelector('.searchNum .num').textContent = '$total_sections';</script>";
+
+        $args['posts_per_page'] = $posts_per_page;
+
         $land_query = new WP_Query($args);
-        
+
         if ($land_query->have_posts()) :
             echo '<ul class="land-archive">'; // Optional: Add a wrapper for styling
             while ($land_query->have_posts()) : $land_query->the_post();
@@ -165,13 +392,13 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
                         <?php echo get_post_meta(get_the_ID(), 'address', true); ?>
                     </p>
                     <div class="land-pricearea">
-                        <span class="min-price"><?php echo get_post_meta(get_the_ID(), 'minmax_price', true)['min']; ?></span>
+                        <span class="min-price"><?php echo number_format(get_post_meta(get_the_ID(), 'min_price', true)); ?></span>
                         <?php
-                        $max_price = get_post_meta(get_the_ID(), 'minmax_price', true)['max'];
-                        if ($max_price !== null) {
+                        $max_price = get_post_meta(get_the_ID(), 'max_price', true);
+                        if ($max_price !== "") {
                             echo '
                                 <span class="max-price">
-                                '. $max_price .'
+                                '. (is_numeric($max_price) ? number_format((float)$max_price) : '') .'
                                 </span>
                             ';
                         }

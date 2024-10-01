@@ -70,6 +70,140 @@ add_image_size( 'top_event', 750, 600, true );
 
 // ------------------------------------------------------------------------------------------------------------------------------------------
 
+function get_city_from_id($id) {
+
+}
+
+function get_area_from_id($id) {
+    switch ($id) {
+        case 0:
+            return "選択してください";
+            break;
+        case 1:
+            return "茨城県北エリア";
+            break;
+        case 2:
+            return "茨城県央エリア";
+            break;
+        case 3:
+            return "茨城県南エリア";
+            break;
+        case 4:
+            return "茨城県鹿行エリア";
+            break;
+        case 5:
+            return "茨城県西エリア";
+            break;
+        case 6:
+            return "栃木県北エリア";
+            break;
+        case 7:
+            return "栃木県央エリア";
+            break;
+        case 8:
+            return "栃木県南エリア";
+            break;
+        case 9:
+            return "千葉東葛エリア内";
+            break;
+        case 10:
+            return "千葉東葛エリア外";
+            break;
+        default:
+            break;
+    }
+}
+
+function area_from_query($query) {
+    $return_data = '';
+    switch ($query) {
+        case 1:
+            $return_data = '茨城県北エリア';
+            break;
+        case 2:
+            $return_data = '茨城県央エリア';
+            break;
+        case 3:
+            $return_data = '茨城県南エリア';
+            break;
+        case 4:
+            $return_data = '茨城県鹿行エリア';
+            break;
+        case 5:
+            $return_data = '茨城県西エリア';
+            break;
+        case 6:
+            $return_data = '栃木県北エリア';
+            break;
+        case 7:
+            $return_data = '栃木県央エリア';
+            break;
+        case 8:
+            $return_data = '栃木県南エリア';
+            break;
+        case 9:
+            $return_data = '千葉東葛エリア内';
+            break;
+        case 10:
+            $return_data = '千葉東葛エリア外';
+            break;
+        default:
+            $return_data = '選択してください';
+            break;
+    }
+    return $return_data;
+}
+
+function sort_from_query($query_sort) {
+    $sort_meta_key = '';
+    $sort_order = '';
+    $sort_orderby = [];
+    switch ($query_sort) {
+        case 'price_ASC':
+            $sort_meta_key = "min_price";
+            $sort_orderby = array(
+                'meta_value_num' => 'ASC',
+                'date' => 'DESC',
+            );
+            $sort_order = null;
+            break;
+        case 'price_DESC':
+            $sort_meta_key = "max_price";
+            $sort_orderby = array(
+                'meta_value_num' => 'DESC',
+                'date' => 'DESC',
+            );
+            $sort_order = null;
+            break;
+        case 'land_DESC':
+            $sort_meta_key = "min_area";
+            $sort_orderby = array(
+                'meta_value_num' => 'DESC',
+                'date' => 'DESC',
+            );
+            $sort_order = null;
+            break;
+        case 'land_ASC':
+            $sort_meta_key = "max_area";
+            $sort_orderby = array(
+                'meta_value_num' => 'ASC',
+                'date' => 'DESC',
+            );
+            $sort_order = null;
+            break;
+        default:
+            $sort_meta_key = null;
+            $sort_orderby = 'date';
+            $sort_order = 'DESC';
+            break;
+    }
+    return [
+        "sort_meta_key" => $sort_meta_key,
+        "sort_orderby" => $sort_orderby,
+        "sort_order" => $sort_order,
+    ];
+}
+
 function extract_slug($url) {
     if(strpos($url, '?')) {
         preg_match('/\/(\d+)\/\?/', $url, $matches);
@@ -148,7 +282,10 @@ function create_single_post($data) {
           update_post_meta($post_id, 'updatedAt', $data['updatedAt'], true);
           update_post_meta($post_id, 'floor_plan', $data['floor_plan'], true);
           update_post_meta($post_id, 'priceBox', $data['priceBox'], true);
-          update_post_meta($post_id, 'minmax_price', $data['minmax_price'], true);
+          update_post_meta($post_id, 'min_price', $data['min_price'], true);
+          update_post_meta($post_id, 'max_price', $data['max_price'], true);
+          update_post_meta($post_id, 'min_area', $data['min_area'], true);
+          update_post_meta($post_id, 'max_area', $data['max_area'], true);
           update_post_meta($post_id, 'surround_imgarea', $data['surround_imgarea'], true);
           update_post_meta($post_id, 'surround_area', $data['surround_area'], true);
           update_post_meta($post_id, 'map_embed_url', $data['map_embed_url'], true);
@@ -174,6 +311,9 @@ function upload_image_to_media_library($image_url, $post_id) {
 
   return $image_id;
 }
+
+// print_r(scrapy_single_page("https://tochitosumainojohokan.jp/land/2025012404/", 107));
+// die();
 
 function scrapy_single_page($url, $len) {
   // Use wp_remote_get to fetch the content
@@ -299,9 +439,13 @@ function scrapy_single_page($url, $len) {
                 break;
             case '販売価格':
                 $title = "price_range";
+
                 break;
             case '土地面積':
                 $title = "area_range";
+                preg_match_all('/\d+\.\d+/', $text, $matches);
+                $return_data['min_area'] = floatval(str_replace(',', '', $matches[0][0]));
+                $return_data['max_area'] = floatval(str_replace(',', '', $matches[0][2]));
                 break;
             case '学区':
                 $title = "school";
@@ -355,7 +499,8 @@ function scrapy_single_page($url, $len) {
                 $title = "updatedAt";
                 break;
         }
-          $return_data[$title] = $text;
+
+        $return_data[$title] = $text;
       }
   }
 
@@ -395,7 +540,6 @@ function scrapy_single_page($url, $len) {
   $return_data['priceBox'] = $plotData;
 
   // Price Area
-  $priceData = [];
   $priceArea = $xpath->query('//div[@class="priceArea"]');
   if ($priceArea->length > 0) {
         $lowPrice = trim($xpath->query('.//span[@class="num fRoboto"][1]', $priceArea->item(0))->item(0)->textContent);
@@ -403,13 +547,12 @@ function scrapy_single_page($url, $len) {
     
         if ($highPriceNode->length > 0) {
             $highPrice = trim($highPriceNode->item(0)->textContent);
-            $priceData['max'] = $highPrice;
+            $return_data['max_price'] = intval(str_replace(',', '', $highPrice));
         } else {
-            $priceData['max'] = null; // or handle the absence of high price as needed
+            $return_data['max_price'] = null; // or handle the absence of high price as needed
         }
-        $priceData['min'] = $lowPrice;
+        $return_data['min_price'] = intval(str_replace(',', '', $lowPrice));
   }
-  $return_data['minmax_price'] = $priceData;
 
   //surround_imgarea
   $amenities = [];
@@ -543,6 +686,40 @@ function create_land_links_table() {
     }
 }
 
+function delete_land_links_table() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'land_links';
+
+    // Check if the table exists
+    if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") == $table_name) {
+        // SQL to drop the table
+        $sql = "DROP TABLE IF EXISTS $table_name";
+        $wpdb->query($sql);
+        return "The land_links table has been deleted.";
+    } else {
+        return "The land_links table does not exist.";
+    }
+}
+
+function get_land_links_data() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'land_links';
+    
+    // Check if the table exists
+    if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+        return array('error' => 'Table does not exist');
+    }
+    
+    // Retrieve all rows from the table
+    $results = $wpdb->get_results("SELECT * FROM $table_name", ARRAY_A);
+    
+    if(empty($results)) {
+        return array('message' => 'No data found in the table');
+    }
+    
+    return $results;
+}
+
 function insert_into_land_links_table($link_group) {
     global $wpdb;
     $table_name = $wpdb->prefix . 'land_links'; // Get the table name with prefix
@@ -568,6 +745,26 @@ function insert_into_land_links_table($link_group) {
     }
 }
 
+function delete_land_links_data() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'land_links';
+
+    // Check if the table exists
+    if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") == $table_name) {
+        // Delete all rows from the table
+        $wpdb->query("TRUNCATE TABLE $table_name");
+        return "All data deleted from the land_links table.";
+    } else {
+        return "The land_links table does not exist.";
+    }
+}
+
+
+// create_land_links_table();
+
+// insert_into_land_links_table(get_link_group());
+// die();
+
 function create_entire_posts() {
     global $wpdb;
     $results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}land_links", ARRAY_A);
@@ -587,6 +784,8 @@ function create_specific_posts($start_pos, $end_pos) {
     }
 }
 
+// create_specific_posts(107,109);
+
 // daily_post_func
 function daily_post_func() {
     global $wpdb;
@@ -603,3 +802,52 @@ function daily_post_func() {
         insert_into_land_links_table($add_links);
     }
 }
+
+// // Add a new custom schedule interval for 24 hours
+// function my_custom_cron_schedules( $schedules ) {
+//     // Add a custom schedule for every 24 hours
+//     $schedules['every_day_at_9am'] = array(
+//         'interval' => 24 * 60 * 60, // 24 hours in seconds
+//         'display'  => esc_html__( 'Every Day at 9 AM' ),
+//     );
+
+//     return $schedules;
+// }
+// add_filter( 'cron_schedules', 'my_custom_cron_schedules' );
+
+// // Schedule the cron event if it's not already scheduled
+// function my_schedule_daily_task() {
+//     if ( ! wp_next_scheduled( 'my_daily_task_hook' ) ) {
+//         // Schedule the first event for the next 9 AM
+//         $timestamp = strtotime('09:00:00');
+//         wp_schedule_event( $timestamp, 'every_day_at_9am', 'my_daily_task_hook' );
+//     }
+// }
+// add_action( 'wp', 'my_schedule_daily_task' );
+
+// // Hook your function to the custom cron event
+// add_action( 'my_daily_task_hook', 'daily_post_func' );
+
+// // Clear the scheduled event upon theme/plugin deactivation
+// function my_clear_scheduled_task() {
+//     $timestamp = wp_next_scheduled( 'my_daily_task_hook' );
+//     wp_unschedule_event( $timestamp, 'my_daily_task_hook' );
+// }
+// register_deactivation_hook( __FILE__, 'my_clear_scheduled_task' );
+
+// // Function to check the next scheduled time for your cron event
+// function check_my_scheduled_event() {
+//     // Get the timestamp for the next scheduled event
+//     $next_scheduled = wp_next_scheduled( 'my_daily_task_hook' );
+
+//     if ( $next_scheduled ) {
+//         // Convert the timestamp to a human-readable format
+//         $scheduled_time = date( 'F j, Y, g:i a', $next_scheduled );
+//         echo '<div class="notice notice-success"><p>Next scheduled task at: ' . $scheduled_time . '</p></div>';
+//     } else {
+//         echo '<div class="notice notice-error"><p>No scheduled task found for "my_daily_task_hook".</p></div>';
+//     }
+// }
+
+// // Hook into the WordPress admin notices to display the message
+// add_action( 'admin_notices', 'check_my_scheduled_event' );
