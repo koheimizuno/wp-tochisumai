@@ -21,7 +21,6 @@ function my_script_init() {
     wp_enqueue_script( 'flickity', 'https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js', array(), "true");
     wp_enqueue_script( 'case', get_stylesheet_directory_uri() . "/js/case.js", array(), filemtime(get_stylesheet_directory() . "/js/case.js"), true);
     wp_enqueue_style("case", get_stylesheet_directory_uri() . "/css/case.css", array(), filemtime(get_stylesheet_directory() . "/css/single.css"));
-
   }
   if(is_singular( 'column' ) || is_post_type_archive('column')){
     wp_enqueue_style("single", get_stylesheet_directory_uri() . "/css/single.css", array(), filemtime(get_stylesheet_directory() . "/css/single.css"));
@@ -259,6 +258,7 @@ function create_single_post($data) {
           update_post_meta($post_id, 'thumbnail_img', $data['thumbnail_img'], true);
           update_post_meta($post_id, 'detail_imgs', $data['detail_imgs'], true);
           update_post_meta($post_id, 'address', $data['address'], true);
+          update_post_meta($post_id, 'car_address', $data['car_address'], true);
           update_post_meta($post_id, 'map_link', $data['map_link'], true);
           update_post_meta($post_id, 'traffic', $data['traffic'], true);
           update_post_meta($post_id, 'price_range', $data['price_range'], true);
@@ -311,9 +311,6 @@ function upload_image_to_media_library($image_url, $post_id) {
 
   return $image_id;
 }
-
-// print_r(scrapy_single_page("https://tochitosumainojohokan.jp/land/2025012404/", 107));
-// die();
 
 function scrapy_single_page($url, $len) {
   // Use wp_remote_get to fetch the content
@@ -425,7 +422,6 @@ function scrapy_single_page($url, $len) {
       // Get the title and text
       $title_node = $xpath->query('.//p[@class="tableTit"]', $item);
       $text_node = $xpath->query('.//div[@class="tableTxt"] | .//p[@class="tableTxt"]', $item);
-
       if ($title_node->length > 0 && $text_node->length > 0) {
           $title = trim($title_node->item(0)->textContent);
           $text = trim($text_node->item(0)->textContent);
@@ -439,7 +435,6 @@ function scrapy_single_page($url, $len) {
                 break;
             case '販売価格':
                 $title = "price_range";
-
                 break;
             case '土地面積':
                 $title = "area_range";
@@ -502,6 +497,21 @@ function scrapy_single_page($url, $len) {
 
         $return_data[$title] = $text;
       }
+  }
+
+  // car_address
+  $tableitem_car = $xpath->query('//div[@class="boxTable"]//div[@class="tableItem pc100"]');
+  foreach ($tableitem_car as $item) {
+    $title_node = $xpath->query('.//p[@class="tableTit"]', $item);
+    $text_node = $xpath->query('.//div[@class="tableTxt"] | .//p[@class="tableTxt"]', $item);
+    if ($title_node->length > 0 && $text_node->length > 0) {
+        $title = trim($title_node->item(0)->textContent);
+        $text = trim($text_node->item(0)->textContent);
+        if($title === "カーナビアドレス") {
+            $string_to_remove = "(※現地は上記付近となります。機種により対応できない場合がございます。)";
+            $return_data['car_address'] = str_replace($string_to_remove, '', $text);
+        }
+    }
   }
 
   // Map Link
@@ -759,12 +769,6 @@ function delete_land_links_data() {
     }
 }
 
-
-// create_land_links_table();
-
-// insert_into_land_links_table(get_link_group());
-// die();
-
 function create_entire_posts() {
     global $wpdb;
     $results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}land_links", ARRAY_A);
@@ -784,7 +788,7 @@ function create_specific_posts($start_pos, $end_pos) {
     }
 }
 
-// create_specific_posts(107,109);
+// create_specific_posts(100,109);
 
 // daily_post_func
 function daily_post_func() {

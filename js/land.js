@@ -1,26 +1,45 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Initialize the thumbnails swiper first
-  const thumbsSwiper = new Swiper(".thumbs-swiper", {
-    slidesPerView: 4, // Number of thumbnails to show at once
-    spaceBetween: 10, // Space between thumbnails
-    freeMode: true, // Allows free scrolling through the thumbnails
-    watchSlidesVisibility: true, // Ensures visible slides are updated
-    watchSlidesProgress: true, // Tracks progress of the slides
-  });
+  const thumbsWrapper = document.querySelector(".thumbs-swiper");
+  const thumbsSlides = thumbsWrapper.querySelectorAll(".swiper-slide");
 
-  // Initialize the main swiper and link it with the thumbnails
-  const mainSwiper = new Swiper(".main-swiper", {
-    loop: true,
-    centeredSlides: true,
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
-    },
-    thumbs: {
-      swiper: thumbsSwiper, // Link to the thumbs swiper
-    },
-    speed: 1000, // Transition speed for the main slider
-  });
+  if (thumbsSlides.length >= 2) {
+    // Initialize the thumbnails swiper
+    const thumbsSwiper = new Swiper(".thumbs-swiper", {
+      slidesPerView: 4,
+      spaceBetween: 10,
+      freeMode: true,
+      watchSlidesVisibility: true,
+      watchSlidesProgress: true,
+    });
+
+    // Initialize the main swiper and link it with the thumbnails
+    const mainSwiper = new Swiper(".main-swiper", {
+      loop: true,
+      centeredSlides: true,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      thumbs: {
+        swiper: thumbsSwiper,
+      },
+      speed: 1000,
+    });
+  } else {
+    // Initialize only the main swiper without thumbnails
+    const mainSwiper = new Swiper(".main-swiper", {
+      loop: true,
+      centeredSlides: true,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      speed: 1000,
+    });
+
+    // Hide the thumbnails wrapper
+    thumbsWrapper.style.display = "none";
+  }
 });
 
 // Function to initialize a custom select
@@ -112,6 +131,21 @@ document.querySelectorAll(".custom-select").forEach((selectElement) => {
   initializeCustomSelect(selectElement);
 });
 
+//Handle Search
+document.querySelector(".btn-search").addEventListener("click", () => {
+  let url = new URL(window.location.href);
+  let freeword = document.querySelector("#freeword").value;
+  url.searchParams.set("freeword", freeword);
+  window.location.href = url;
+});
+// URL Query Clear
+document.querySelector(".btn-clear").addEventListener("click", () => {
+  let url = new URL(window.location.href);
+  url.search = "";
+  window.history.pushState({}, "", url);
+  window.location.reload();
+});
+
 // Accordion
 const accordionHeaders = document.querySelectorAll(".sec-search-header");
 
@@ -130,17 +164,6 @@ accordionHeaders.forEach((header) => {
       accordionItem.classList.add("accordion-active");
     }
   });
-});
-
-document.querySelector(".btn-search").addEventListener("click", () => {
-  window.location.reload();
-});
-// URL Query Clear
-document.querySelector(".btn-clear").addEventListener("click", () => {
-  let url = new URL(window.location.href);
-  url.search = "";
-  window.history.pushState({}, "", url);
-  window.location.reload();
 });
 
 document.addEventListener("DOMContentLoaded", function () {

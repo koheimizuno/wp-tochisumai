@@ -120,7 +120,7 @@ do_action( 'lightning_site_header_after', 'lightning_site_header_after' );
                     <tr>
                         <th>カーナビアドレス</th>
                         <td>
-                            <?php echo get_post_meta(get_the_ID(), 'car-address', true); ?>
+                            <?php echo get_post_meta(get_the_ID(), 'car_address', true); ?>
                             <br>
                             (※現地は上記付近となります。機種により対応できない場合がございます。)
                         </td>
@@ -392,9 +392,19 @@ do_action( 'lightning_site_header_after', 'lightning_site_header_after' );
 
 <div class="land-form">
     <div class="container">
-        <?php
-            echo do_shortcode('[mwform_formkey key="3431"]');
-        ?>
+        <div class="form-wrap">
+            <div class="form-title">
+                <h3>土地見学予約フォーム</h3>
+                <p>
+                    下記フォームに必要項目をご入力ください。
+                    <br>
+                    必須項目は必ずご記入ください。
+                </p>
+            </div>
+            <?php
+                echo do_shortcode('[mwform_formkey key="2634"]');
+            ?>
+        </div>
     </div>
 </div>
 

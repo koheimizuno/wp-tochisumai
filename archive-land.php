@@ -286,7 +286,7 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
         $price_max = isset($_GET['price_max']) ? intval($_GET['price_max']) : null;
         $land_area_min = isset($_GET['land_area_min']) ? intval($_GET['land_area_min']) : null;
         $land_area_max = isset($_GET['land_area_max']) ? intval($_GET['land_area_max']) : null;
-
+        $freeword = isset($_GET['freeword']) ? $_GET['freeword'] : null;
         $args = array(
             'post_type' => 'land',
             'posts_per_page' => -1,
@@ -297,7 +297,7 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
             'meta_query' => array()
         );
 
-        if ($price_min !== null) {
+        if ($price_min !== null && $price_min !== '') {
             $args['meta_query'][] = array(
                 'key' => 'min_price',
                 'value' => $price_min,
@@ -306,7 +306,7 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
             );
         }
 
-        if ($price_max !== null) {
+        if ($price_max !== null && $price_max !== '') {
             $args['meta_query'][] = array(
                 'key' => 'max_price',
                 'value' => $price_max,
@@ -315,7 +315,7 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
             );
         }
 
-        if ($land_area_min !== null) {
+        if ($land_area_min !== null && $land_area_min !== '') {
             $args['meta_query'][] = array(
                 'key' => 'min_area',
                 'value' => $land_area_min,
@@ -324,7 +324,7 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
             );
         }
 
-        if ($land_area_max !== null) {
+        if ($land_area_max !== null && $land_area_max !== '') {
             $args['meta_query'][] = array(
                 'key' => 'max_area',
                 'value' => $land_area_max,
@@ -333,13 +333,35 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
             );
         }
 
-        if ($city !== null) {
+        if ($city !== null && $city !== '') {
             $args['meta_query'][] = array(
                 'key' => 'address',
                 'value' => $city === "選択してください" ? null : $city,
                 'compare' => 'LIKE',
                 'type' => 'CHAR'
             );
+        }
+
+        if ($freeword !== null && $freeword !== '') {
+            $args['meta_query'][] = array(
+                'relation' => 'OR',
+                array(
+                    'key' => 'title',
+                    'value' => $freeword,
+                    'compare' => 'LIKE'
+                ),
+                array(
+                    'key' => 'subtitle',
+                    'value' => $freeword,
+                    'compare' => 'LIKE'
+                ),
+                array(
+                    'key' => 'address',
+                    'value' => $freeword,
+                    'compare' => 'LIKE'
+                ),
+            );
+            $args['s'] = $freeword;
         }
 
         $total_sections = 0;
