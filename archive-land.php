@@ -93,7 +93,7 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
                         <div class="custom-select" id="city" reload="0">
                             <div class="select-box">
                                 <?php
-                                    echo isset($_GET['area']) ? $address_data['選択してください'][intval($_GET['city'])] : "選択してください";
+                                    echo isset($_GET['city']) ? (isset($_GET['area']) ? $address_data[area_from_query($_GET['area'])][intval($_GET['city'])] : $address_data['選択してください'][intval($_GET['city'])]) : "選択してください";
                                 ?>
                             </div>
                             <div class="options-container">

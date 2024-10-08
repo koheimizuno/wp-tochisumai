@@ -135,7 +135,7 @@ document.querySelectorAll(".custom-select").forEach((selectElement) => {
 document.querySelector(".btn-search").addEventListener("click", () => {
   let url = new URL(window.location.href);
   let freeword = document.querySelector("#freeword").value;
-  url.searchParams.set("freeword", freeword);
+  freeword && url.searchParams.set("freeword", freeword);
   window.location.href = url;
 });
 // URL Query Clear
