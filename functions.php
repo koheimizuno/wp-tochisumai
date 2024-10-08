@@ -5,7 +5,7 @@ function my_script_init() {
 
     wp_enqueue_style("fancybox", "//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css", array(), "all");
     wp_enqueue_style("cmn", get_stylesheet_directory_uri() . "/css/common.css", array(), filemtime(get_stylesheet_directory() . "/css/common.css"));
-    wp_enqueue_style("top", get_stylesheet_directory_uri() . "/css/top.css", array(), filemtime(get_stylesheet_directory() . "/css/top.css"));
+    wp_enqueue_style("top", get_stylesheet_directory_uri() . "/css/top.min.css", array(), filemtime(get_stylesheet_directory() . "/css/top.min.css"));
     wp_enqueue_script("fancybox", "//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js", array(), true);
     wp_enqueue_script("gsap_min", "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js", array(), true);
     wp_enqueue_script("gsap_scroll", "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js", array(), true);

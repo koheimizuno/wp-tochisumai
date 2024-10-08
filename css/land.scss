@@ -666,7 +666,6 @@ h2.land-title {
 }
 
 .secDetailsContents {
-  padding: 60px 0;
   background-color: #1a333d;
   position: relative;
   ul.pageLinkList {
@@ -675,6 +674,12 @@ h2.land-title {
     align-items: center;
     flex-wrap: wrap;
     gap: 1.25%;
+    padding: 60px 0 20px;
+    background-color: #1a333d;
+    position: sticky;
+    top: 0;
+    right: 0;
+    z-index: 1000000;
     @media screen and (max-width: $middle-screen) {
       gap: 2.5%;
     }
@@ -965,6 +970,7 @@ h2.land-title {
   }
 
   .sec-overview {
+    display: inline-block;
     .tablelist {
       display: flex;
       flex-wrap: wrap;

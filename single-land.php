@@ -191,7 +191,7 @@ do_action( 'lightning_site_header_after', 'lightning_site_header_after' );
                 </a>
             </li>
         </ul>
-        <div class="sec-plan land-section">
+        <div class="sec-plan land-section" id="pagePlan">
             <div class="contentsTit">
                 <p class="enTit">PLAN</p>
                 <p class="jpTit">区画図・間取り</p>
@@ -225,7 +225,7 @@ do_action( 'lightning_site_header_after', 'lightning_site_header_after' );
                 ?>
             </div>
         </div>
-        <div class="sec-location land-section">
+        <div class="sec-location land-section" id="pageLocation">
             <div class="contentsTit">
                 <p class="enTit">LOCATION</p>
                 <p class="jpTit">周辺環境</p>
@@ -272,7 +272,7 @@ do_action( 'lightning_site_header_after', 'lightning_site_header_after' );
                 ?>
             </ul>
         </div>
-        <div class="sec-access land-section">
+        <div class="sec-access land-section" id="pageAccess">
             <div class="contentsTit">
                 <p class="enTit">ACCESS</p>
                 <p class="jpTit">地図</p>
@@ -283,7 +283,7 @@ do_action( 'lightning_site_header_after', 'lightning_site_header_after' );
                 </iframe>
             </div>
         </div>
-        <dic class="sec-overview">
+        <dic class="sec-overview land-section" id="pageOverview">
             <div class="contentsTit">
                 <p class="enTit">OVERVIEW</p>
                 <p class="jpTit">物件概要</p>
