@@ -73,7 +73,7 @@ function get_city_from_id($id) {
 
 }
 
-function get_area_from_id($id) {
+function get_location_from_id($id) {
     switch ($id) {
         case 0:
             return "選択してください";
@@ -113,7 +113,7 @@ function get_area_from_id($id) {
     }
 }
 
-function area_from_query($query) {
+function location_from_query($query) {
     $return_data = '';
     switch ($query) {
         case 1:

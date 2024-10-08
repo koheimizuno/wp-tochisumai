@@ -64,27 +64,27 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
             <div class="sec-search-content">
                 <div class="search-row">
                     <div class="itemSelect">
-                        <label for="area">エリア</label>
-                        <div class="custom-select" id="area" reload="0">
+                        <label for="location">エリア</label>
+                        <div class="custom-select" id="location" reload="0">
                             <div class="select-box">
-                                <?php echo (isset($_GET['area']) && $_GET['area']) ? area_from_query($_GET['area']) : "選択してください"; ?>
+                                <?php echo (isset($_GET['location']) && $_GET['location']) ? location_from_query($_GET['location']) : "選択してください"; ?>
                             </div>
                             <div class="options-container">
                                 <?php
                                     $json_file = file_get_contents(get_stylesheet_directory() . '/js/address.json');
                                     $address_data = json_decode($json_file, true);
                                 ?>
-                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 0) ? 'active-option' : ''; ?>" data-value="all" data-cities="<?php echo htmlspecialchars(json_encode($address_data['選択してください']), ENT_QUOTES, 'UTF-8'); ?>">選択してください</div>
-                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 1) ? 'active-option' : ''; ?>" data-value="1" data-cities="<?php echo htmlspecialchars(json_encode($address_data['茨城県北エリア']), ENT_QUOTES, 'UTF-8'); ?>">茨城県北エリア</div>
-                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 2) ? 'active-option' : ''; ?>" data-value="2" data-cities="<?php echo htmlspecialchars(json_encode($address_data['茨城県央エリア']), ENT_QUOTES, 'UTF-8'); ?>">茨城県央エリア</div>
-                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 3) ? 'active-option' : ''; ?>" data-value="3" data-cities="<?php echo htmlspecialchars(json_encode($address_data['茨城県南エリア']), ENT_QUOTES, 'UTF-8'); ?>">茨城県南エリア</div>
-                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 4) ? 'active-option' : ''; ?>" data-value="4" data-cities="<?php echo htmlspecialchars(json_encode($address_data['茨城県鹿行エリア']), ENT_QUOTES, 'UTF-8'); ?>">茨城県鹿行エリア</div>
-                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 5) ? 'active-option' : ''; ?>" data-value="5" data-cities="<?php echo htmlspecialchars(json_encode($address_data['茨城県西エリア']), ENT_QUOTES, 'UTF-8'); ?>">茨城県西エリア</div>
-                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 6) ? 'active-option' : ''; ?>" data-value="6" data-cities="<?php echo htmlspecialchars(json_encode($address_data['栃木県北エリア']), ENT_QUOTES, 'UTF-8'); ?>">栃木県北エリア</div>
-                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 7) ? 'active-option' : ''; ?>" data-value="7" data-cities="<?php echo htmlspecialchars(json_encode($address_data['栃木県央エリア']), ENT_QUOTES, 'UTF-8'); ?>">栃木県央エリア</div>
-                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 8) ? 'active-option' : ''; ?>" data-value="8" data-cities="<?php echo htmlspecialchars(json_encode($address_data['栃木県南エリア']), ENT_QUOTES, 'UTF-8'); ?>">栃木県南エリア</div>
-                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 9) ? 'active-option' : ''; ?>" data-value="9" data-cities="<?php echo htmlspecialchars(json_encode($address_data['千葉東葛エリア内']), ENT_QUOTES, 'UTF-8'); ?>">千葉東葛エリア内</div>
-                                <div class="option <?php echo (isset($_GET['area']) && $_GET['area'] == 10) ? 'active-option' : ''; ?>" data-value="10" data-cities="<?php echo htmlspecialchars(json_encode($address_data['千葉東葛エリア外']), ENT_QUOTES, 'UTF-8'); ?>">千葉東葛エリア外</div>
+                                <div class="option <?php echo (isset($_GET['location']) && $_GET['location'] == 0) ? 'active-option' : ''; ?>" data-value="all" data-cities="<?php echo htmlspecialchars(json_encode($address_data['選択してください']), ENT_QUOTES, 'UTF-8'); ?>">選択してください</div>
+                                <div class="option <?php echo (isset($_GET['location']) && $_GET['location'] == 1) ? 'active-option' : ''; ?>" data-value="1" data-cities="<?php echo htmlspecialchars(json_encode($address_data['茨城県北エリア']), ENT_QUOTES, 'UTF-8'); ?>">茨城県北エリア</div>
+                                <div class="option <?php echo (isset($_GET['location']) && $_GET['location'] == 2) ? 'active-option' : ''; ?>" data-value="2" data-cities="<?php echo htmlspecialchars(json_encode($address_data['茨城県央エリア']), ENT_QUOTES, 'UTF-8'); ?>">茨城県央エリア</div>
+                                <div class="option <?php echo (isset($_GET['location']) && $_GET['location'] == 3) ? 'active-option' : ''; ?>" data-value="3" data-cities="<?php echo htmlspecialchars(json_encode($address_data['茨城県南エリア']), ENT_QUOTES, 'UTF-8'); ?>">茨城県南エリア</div>
+                                <div class="option <?php echo (isset($_GET['location']) && $_GET['location'] == 4) ? 'active-option' : ''; ?>" data-value="4" data-cities="<?php echo htmlspecialchars(json_encode($address_data['茨城県鹿行エリア']), ENT_QUOTES, 'UTF-8'); ?>">茨城県鹿行エリア</div>
+                                <div class="option <?php echo (isset($_GET['location']) && $_GET['location'] == 5) ? 'active-option' : ''; ?>" data-value="5" data-cities="<?php echo htmlspecialchars(json_encode($address_data['茨城県西エリア']), ENT_QUOTES, 'UTF-8'); ?>">茨城県西エリア</div>
+                                <div class="option <?php echo (isset($_GET['location']) && $_GET['location'] == 6) ? 'active-option' : ''; ?>" data-value="6" data-cities="<?php echo htmlspecialchars(json_encode($address_data['栃木県北エリア']), ENT_QUOTES, 'UTF-8'); ?>">栃木県北エリア</div>
+                                <div class="option <?php echo (isset($_GET['location']) && $_GET['location'] == 7) ? 'active-option' : ''; ?>" data-value="7" data-cities="<?php echo htmlspecialchars(json_encode($address_data['栃木県央エリア']), ENT_QUOTES, 'UTF-8'); ?>">栃木県央エリア</div>
+                                <div class="option <?php echo (isset($_GET['location']) && $_GET['location'] == 8) ? 'active-option' : ''; ?>" data-value="8" data-cities="<?php echo htmlspecialchars(json_encode($address_data['栃木県南エリア']), ENT_QUOTES, 'UTF-8'); ?>">栃木県南エリア</div>
+                                <div class="option <?php echo (isset($_GET['location']) && $_GET['location'] == 9) ? 'active-option' : ''; ?>" data-value="9" data-cities="<?php echo htmlspecialchars(json_encode($address_data['千葉東葛エリア内']), ENT_QUOTES, 'UTF-8'); ?>">千葉東葛エリア内</div>
+                                <div class="option <?php echo (isset($_GET['location']) && $_GET['location'] == 10) ? 'active-option' : ''; ?>" data-value="10" data-cities="<?php echo htmlspecialchars(json_encode($address_data['千葉東葛エリア外']), ENT_QUOTES, 'UTF-8'); ?>">千葉東葛エリア外</div>
                             </div>
                         </div>
                     </div>
@@ -93,7 +93,7 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
                         <div class="custom-select" id="city" reload="0">
                             <div class="select-box">
                                 <?php
-                                    echo isset($_GET['city']) ? (isset($_GET['area']) ? $address_data[area_from_query($_GET['area'])][intval($_GET['city'])] : $address_data['選択してください'][intval($_GET['city'])]) : "選択してください";
+                                    echo isset($_GET['city']) ? (isset($_GET['location']) ? $address_data[location_from_query($_GET['location'])][intval($_GET['city'])] : $address_data['選択してください'][intval($_GET['city'])]) : "選択してください";
                                 ?>
                             </div>
                             <div class="options-container">
@@ -227,49 +227,7 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
             </div>
         </div>
 
-        <div class="perpagesortsec">
-            <div class="itemSelect">
-                <label for="listrows">表示件数</label>
-                <div class="custom-select" id="listrows" reload="1">
-                    <div class="select-box"><?php echo (isset($_GET['listrows']) && $_GET['listrows']) ? $_GET['listrows'] . '件' : "表示件数"; ?></div>
-                    <div class="options-container">
-                        <div class="option <?php echo (isset($_GET['listrows']) && $_GET['listrows'] == 10) ? 'active-option' : ''; ?>" data-value="10">10件</div>
-                        <div class="option <?php echo (isset($_GET['listrows']) && $_GET['listrows'] == 30) ? 'active-option' : ''; ?>" data-value="30">30件</div>
-                        <div class="option <?php echo (isset($_GET['listrows']) && $_GET['listrows'] == 50) ? 'active-option' : ''; ?>" data-value="50">50件</div>
-                    </div>
-                </div>
-            </div>
-            <div class="itemSelect">
-                <label for="order">並び替え</label>
-                <div class="custom-select" id="sort" reload="1">
-                    <?php
-                        function get_sort_options_str($sort) {
-                            switch ($sort) {
-                                case "modified_DESC":
-                                    return "新着順";
-                                case "price_ASC":
-                                    return "価格が安い";
-                                case "price_DESC":
-                                    return "価格が高い";
-                                case "land_DESC":
-                                    return "土地面積が広い";
-                                case "land_ASC":
-                                    return "土地面積が狭い";
-                            }
-                        }
-                    ?>
-                    <div class="select-box"><?php echo (isset($_GET['sort']) && $_GET['sort']) ? get_sort_options_str($_GET['sort']) : "新着順"; ?></div>
-                    <div class="options-container">
-                        <div class="option <?php echo (isset($_GET['sort']) && $_GET['sort'] == "modified_DESC") ? 'active-option' : ''; ?>" data-value="modified_DESC">新着順</div>
-                        <div class="option <?php echo (isset($_GET['sort']) && $_GET['sort'] == "price_ASC") ? 'active-option' : ''; ?>" data-value="price_ASC">価格が安い</div>
-                        <div class="option <?php echo (isset($_GET['sort']) && $_GET['sort'] == "price_DESC") ? 'active-option' : ''; ?>" data-value="price_DESC">価格が高い</div>
-                        <div class="option <?php echo (isset($_GET['sort']) && $_GET['sort'] == "land_DESC") ? 'active-option' : ''; ?>" data-value="land_DESC">土地面積が広い</div>
-                        <div class="option <?php echo (isset($_GET['sort']) && $_GET['sort'] == "land_ASC") ? 'active-option' : ''; ?>" data-value="land_ASC">土地面積が狭い</div>
-                    </div>
-                </div>
-            </div>            
-        </div>
-
+        
         <?php
         $posts_per_page = isset($_GET['listrows']) ? intval($_GET['listrows']) : 30;
         $paged = isset($_GET['pager']) ? intval($_GET['pager']) : 1;
@@ -277,10 +235,10 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
         $query_sort = isset($_GET['sort']) ? $_GET['sort'] : "modified_DESC";
         $sort = sort_from_query($query_sort);
 
-        $area_query = isset($_GET['area']) ? intval($_GET['area']) : null;
+        $area_query = isset($_GET['location']) ? intval($_GET['location']) : null;
         $city_query = isset($_GET['city']) ? intval($_GET['city']) : null;
 
-        $city = isset($address_data[get_area_from_id($area_query)][$city_query]) ? $address_data[get_area_from_id($area_query)][$city_query] : null;
+        $city = isset($address_data[location_from_query($area_query)][$city_query]) ? $address_data[location_from_query($area_query)][$city_query] : null;
         
         $price_min = isset($_GET['price_min']) ? intval($_GET['price_min']) : null;
         $price_max = isset($_GET['price_max']) ? intval($_GET['price_max']) : null;
@@ -340,6 +298,19 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
                 'compare' => 'LIKE',
                 'type' => 'CHAR'
             );
+        } else if ($area_query !== null && $area_query !== '') {
+            $city_meta_query = array('relation' => 'OR');
+            foreach ($address_data[location_from_query($area_query)] as $value) {
+                if ($value !== "選択してください") {
+                    $city_meta_query[] = array(
+                        'key' => 'address',
+                        'value' => $value,
+                        'compare' => 'LIKE',
+                        'type' => 'CHAR'
+                    );
+                }
+            }
+            $args['meta_query'][] = $city_meta_query;
         }
 
         if ($freeword !== null && $freeword !== '') {
@@ -379,6 +350,51 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
         $args['posts_per_page'] = $posts_per_page;
 
         $land_query = new WP_Query($args);
+
+        if ($land_query->have_posts()) : ?>
+            <div class="perpagesortsec">
+                <div class="itemSelect">
+                    <label for="listrows">表示件数</label>
+                    <div class="custom-select" id="listrows" reload="1">
+                        <div class="select-box"><?php echo (isset($_GET['listrows']) && $_GET['listrows']) ? $_GET['listrows'] . '件' : "表示件数"; ?></div>
+                        <div class="options-container">
+                            <div class="option <?php echo (isset($_GET['listrows']) && $_GET['listrows'] == 10) ? 'active-option' : ''; ?>" data-value="10">10件</div>
+                            <div class="option <?php echo (isset($_GET['listrows']) && $_GET['listrows'] == 30) ? 'active-option' : ''; ?>" data-value="30">30件</div>
+                            <div class="option <?php echo (isset($_GET['listrows']) && $_GET['listrows'] == 50) ? 'active-option' : ''; ?>" data-value="50">50件</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="itemSelect">
+                    <label for="order">並び替え</label>
+                    <div class="custom-select" id="sort" reload="1">
+                        <?php
+                            function get_sort_options_str($sort) {
+                                switch ($sort) {
+                                    case "modified_DESC":
+                                        return "新着順";
+                                    case "price_ASC":
+                                        return "価格が安い";
+                                    case "price_DESC":
+                                        return "価格が高い";
+                                    case "land_DESC":
+                                        return "土地面積が広い";
+                                    case "land_ASC":
+                                        return "土地面積が狭い";
+                                }
+                            }
+                        ?>
+                        <div class="select-box"><?php echo (isset($_GET['sort']) && $_GET['sort']) ? get_sort_options_str($_GET['sort']) : "新着順"; ?></div>
+                        <div class="options-container">
+                            <div class="option <?php echo (isset($_GET['sort']) && $_GET['sort'] == "modified_DESC") ? 'active-option' : ''; ?>" data-value="modified_DESC">新着順</div>
+                            <div class="option <?php echo (isset($_GET['sort']) && $_GET['sort'] == "price_ASC") ? 'active-option' : ''; ?>" data-value="price_ASC">価格が安い</div>
+                            <div class="option <?php echo (isset($_GET['sort']) && $_GET['sort'] == "price_DESC") ? 'active-option' : ''; ?>" data-value="price_DESC">価格が高い</div>
+                            <div class="option <?php echo (isset($_GET['sort']) && $_GET['sort'] == "land_DESC") ? 'active-option' : ''; ?>" data-value="land_DESC">土地面積が広い</div>
+                            <div class="option <?php echo (isset($_GET['sort']) && $_GET['sort'] == "land_ASC") ? 'active-option' : ''; ?>" data-value="land_ASC">土地面積が狭い</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif;
 
         if ($land_query->have_posts()) :
             echo '<ul class="land-archive">'; // Optional: Add a wrapper for styling
