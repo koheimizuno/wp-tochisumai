@@ -1596,6 +1596,7 @@ textarea {
 
 .zip-wrapper .zip-error {
   color: red;
+  text-align: left;
 }
 
 .advice-box {

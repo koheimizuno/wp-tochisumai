@@ -91,48 +91,68 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
                     <script>
                         jQuery(document).ready(function($) {
                             $('#location .option').on('click', function() {
-                                let locationValue = $(this).data('value');
-                                $('.location-select .select-box').text($(this).text());
-                                $('#city .select-box').text("選択してください");
-                                $('#city .options-container').empty();
-                                $.ajax({
-                                    url: '<?php echo admin_url('admin-ajax.php'); ?>',
-                                    type: 'POST',
-                                    data: {
-                                        action: 'update_cities',
-                                        location: locationValue
-                                    },
-                                    success: function(response) {
-                                        $('#city .options-container').html(response);
-                                        $('#city .options-container').on('click', '.option', function() {
-                                            let cityValue = $(this).data('value');
-                                            $('#city .select-box').text($(this).text());
-                                            $('#city .options-container').removeClass('select-open');
-                                            $('#selected_city').val(cityValue);
-                                        });
-                                    },
-                                    error: function() {
-                                        alert('Failed to load cities');
-                                    }
-                                });
-                            });
+								let locationValue = $(this).data('value');
+								let locationText = $(this).text();
+								$('.location-select .select-box').text(locationText);
+								$('#city .select-box').text("選択してください");
+								$('#city .options-container').empty();
+
+								// Update the URL query parameters for location
+								const url = new URL(window.location.href);
+								url.searchParams.set('location', locationValue);
+								history.replaceState(null, '', url);
+
+								// AJAX request to load cities
+								$.ajax({
+									url: '<?php echo admin_url('admin-ajax.php'); ?>',
+									type: 'POST',
+									data: {
+										action: 'update_cities',
+										location: locationValue
+									},
+									success: function(response) {
+										$('#city .options-container').html(response);
+
+										// Add event handler for city selection
+										$('#city .options-container').on('click', '.option', function() {
+											let cityValue = $(this).data('value');
+											$('#city .select-box').text($(this).text());
+											$('#city .options-container').removeClass('select-open');
+											$('#selected_city').val(cityValue);
+
+											// Update URL with city parameter
+											url.searchParams.set('city', cityValue);
+											history.replaceState(null, '', url);
+										});
+									},
+									error: function() {
+										alert('Failed to load cities');
+									}
+								});
+							});
                         });
                     </script>
                     <div class="itemSelect">
-                        <label for="city">市区町村</label>
-                        <div class="custom-select" id="city" reload="0">
-                            <div class="select-box">
-                                <?php
-                                    echo isset($_GET['city']) ? (isset($_GET['location']) ? $address_data[location_from_query($_GET['location'])][intval($_GET['city'])] : $address_data['選択してください'][intval($_GET['city'])]) : "選択してください";
-                                ?>
-                            </div>
-                            <div class="options-container">
-                                <?php foreach ($address_data[isset($_GET['location']) ? location_from_query($_GET['location']) : '選択してください'] as $key => $city) : ?>
-                                    <div class="option <?php echo (isset($_GET['city']) && $_GET['city'] == $key) ? 'active-option' : ''; ?>" data-value="<?php echo $key === 0 ? "all" : $key; ?>"><?php echo $city; ?></div>
-                                <?php endforeach; ?>
-                            </div>
-                        </div>
-                    </div>
+						<label for="city">市区町村</label>
+						<div class="custom-select" id="city" reload="0">
+							<div class="select-box">
+								<?php
+									// Check if location and city are set in the URL
+									echo isset($_GET['city']) ? 
+										 (isset($_GET['location']) ? $address_data[location_from_query($_GET['location'])][intval($_GET['city'])] : $address_data['選択してください'][intval($_GET['city'])]) 
+										 : "選択してください";
+								?>
+							</div>
+							<div class="options-container">
+								<?php 
+									$location = isset($_GET['location']) ? location_from_query($_GET['location']) : '選択してください';
+									foreach ($address_data[$location] as $key => $city) : 
+								?>
+									<div class="option <?php echo (isset($_GET['city']) && $_GET['city'] == $key) ? 'active-option' : ''; ?>" data-value="<?php echo $key === 0 ? "all" : $key; ?>"><?php echo $city; ?></div>
+								<?php endforeach; ?>
+							</div>
+						</div>
+					</div>
                     <div class="sm-row">
                         <label for="price-title" >価格</label>
                         <div class="price-range-row">
