@@ -403,7 +403,13 @@ do_action( 'lightning_site_header_after', 'lightning_site_header_after' );
             </div>
             <?php
                 echo do_shortcode('[mwform_formkey key="2634"]');
+                // echo do_shortcode('[mwform_formkey key="2634" custom_param="value"]');
             ?>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    logTitle("<?php echo esc_js( the_title( '', '', false ) ); ?>");
+                });
+            </script>
         </div>
     </div>
 </div>

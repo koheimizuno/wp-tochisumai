@@ -88,6 +88,36 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
                             </div>
                         </div>
                     </div>
+                    <script>
+                        jQuery(document).ready(function($) {
+                            $('#location .option').on('click', function() {
+                                let locationValue = $(this).data('value');
+                                $('.location-select .select-box').text($(this).text());
+                                $('#city .select-box').text("選択してください");
+                                $('#city .options-container').empty();
+                                $.ajax({
+                                    url: '<?php echo admin_url('admin-ajax.php'); ?>',
+                                    type: 'POST',
+                                    data: {
+                                        action: 'update_cities',
+                                        location: locationValue
+                                    },
+                                    success: function(response) {
+                                        $('#city .options-container').html(response);
+                                        $('#city .options-container').on('click', '.option', function() {
+                                            let cityValue = $(this).data('value');
+                                            $('#city .select-box').text($(this).text());
+                                            $('#city .options-container').removeClass('select-open');
+                                            $('#selected_city').val(cityValue);
+                                        });
+                                    },
+                                    error: function() {
+                                        alert('Failed to load cities');
+                                    }
+                                });
+                            });
+                        });
+                    </script>
                     <div class="itemSelect">
                         <label for="city">市区町村</label>
                         <div class="custom-select" id="city" reload="0">
@@ -97,7 +127,7 @@ do_action('lightning_site_header_after', 'lightning_site_header_after');
                                 ?>
                             </div>
                             <div class="options-container">
-                                <?php foreach ($address_data['選択してください'] as $key => $city) : ?>
+                                <?php foreach ($address_data[isset($_GET['location']) ? location_from_query($_GET['location']) : '選択してください'] as $key => $city) : ?>
                                     <div class="option <?php echo (isset($_GET['city']) && $_GET['city'] == $key) ? 'active-option' : ''; ?>" data-value="<?php echo $key === 0 ? "all" : $key; ?>"><?php echo $city; ?></div>
                                 <?php endforeach; ?>
                             </div>

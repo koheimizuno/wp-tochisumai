@@ -1327,6 +1327,37 @@ textarea {
   align-items: center;
 }
 
+.zip-wrapper {
+  .dd-flex {
+    justify-content: flex-start;
+    gap: 10px;
+    dd {
+      &:first-child {
+        flex-basis: 150px;
+      }
+    }
+  }
+  .zipSubmit {
+    display: inline-block;
+    width: 120px;
+    line-height: 40px;
+    background: #444444;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 50px;
+    margin-left: 10px;
+    color: #fff;
+    font-size: 12px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border: none;
+  }
+
+  .zip-error {
+    color: red;
+  }
+}
+
 .advice-box {
   background-color: #f5f5f5;
   padding: 30px;

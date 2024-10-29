@@ -807,6 +807,32 @@ function daily_post_func() {
     }
 }
 
+// location and city select handler
+function update_cities_callback() {
+    if (isset($_POST['location'])) {
+        $location = sanitize_text_field($_POST['location']);
+        
+        // Fetch address data from JSON
+        $json_file = file_get_contents(get_stylesheet_directory() . '/js/address.json');
+        $address_data = json_decode($json_file, true);
+
+        // Determine the cities for the selected location
+        $location_key = ($location == 'all') ? '選択してください' : location_from_query($location);
+        $cities = $address_data[$location_key] ?? [];
+
+        // Generate HTML for city options
+        foreach ($cities as $key => $city) {
+            $value = ($key === 0) ? "all" : $key;
+            echo '<div class="option" data-value="' . esc_attr($value) . '">' . esc_html($city) . '</div>';
+        }
+    }
+    wp_die(); // required to end AJAX request
+}
+add_action('wp_ajax_update_cities', 'update_cities_callback');
+add_action('wp_ajax_nopriv_update_cities', 'update_cities_callback');
+
+
+
 // // Add a new custom schedule interval for 24 hours
 // function my_custom_cron_schedules( $schedules ) {
 //     // Add a custom schedule for every 24 hours
@@ -855,3 +881,12 @@ function daily_post_func() {
 
 // // Hook into the WordPress admin notices to display the message
 // add_action( 'admin_notices', 'check_my_scheduled_event' );
+
+// add_filter( 'mwform_value_mw-wp-form-2634', 'my_custom_form_value', 10, 2 );
+// function my_custom_form_value( $value, $name ) {
+//     if ( $name === 'hope-area' && isset( $_GET['custom_param'] ) ) {
+//         var_dump($_GET['custom_param'] );        
+//         $value = sanitize_text_field( $_GET['custom_param'] );
+//     }
+//     return $value;
+// }
