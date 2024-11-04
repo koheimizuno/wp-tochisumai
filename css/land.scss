@@ -694,26 +694,25 @@ h2.land-title {
       padding: 20px 20px;
       border-radius: 5px;
       box-shadow: 1px 1px 5px #ccc;
+      cursor: pointer;
       @media screen and (max-width: $middle-screen) {
         margin: 1.25% 0;
         width: 150px;
       }
-      a {
+      p {
         color: #1a333d;
-        p {
-          &:first-child {
-            font-size: 14px;
-            font-weight: 900;
-            letter-spacing: 0;
-            @media screen and (max-width: $middle-screen) {
-              font-size: 10px;
-            }
+        &:first-child {
+          font-size: 14px;
+          font-weight: 900;
+          letter-spacing: 0;
+          @media screen and (max-width: $middle-screen) {
+            font-size: 10px;
           }
-          &:last-child {
-            font-size: 20px;
-            @media screen and (max-width: $middle-screen) {
-              font-size: 14px;
-            }
+        }
+        &:last-child {
+          font-size: 20px;
+          @media screen and (max-width: $middle-screen) {
+            font-size: 14px;
           }
         }
       }
@@ -1203,11 +1202,6 @@ dl {
 @media screen and (max-width: 767px) {
   .form-row dd {
     min-height: 40px;
-  }
-}
-@media screen and (min-width: 768px) {
-  .form-row dd + dd {
-    margin-top: 15px;
   }
 }
 .form-box .note {

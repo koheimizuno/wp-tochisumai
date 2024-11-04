@@ -166,29 +166,21 @@ do_action( 'lightning_site_header_after', 'lightning_site_header_after' );
 <div class="secDetailsContents">
     <div class="container">
         <ul class="pageLinkList">
-            <li>
-                <a href="#pagePlan">
-                    <p>PLAN</p>
-                    <p>区画図・間取り</p>
-                </a>
+            <li id="pagePlanLink">
+                <p>PLAN</p>
+                <p>区画図・間取り</p>
             </li>
-            <li>
-                <a href="#pageLocation">
-                    <p>LOCATION</p>
-                    <p>周辺環境</p>
-                </a>
+            <li id="pageLocationLink">
+                <p>LOCATION</p>
+                <p>周辺環境</p>
             </li>
-            <li>
-                <a href="#pageAccess">
-                    <p>ACCESS</p>
-                    <p>地図</p>
-                </a>
+            <li id="pageAccessLink">
+                <p>ACCESS</p>
+                <p>地図</p>
             </li>
-            <li>
-                <a href="#pageOverview">
-                    <p>OVERVIEW</p>
-                    <p>物件概要</p>
-                </a>
+            <li id="pageOverviewLink">
+                <p>OVERVIEW</p>
+                <p>物件概要</p>
             </li>
         </ul>
         <div class="sec-plan land-section" id="pagePlan">
@@ -407,7 +399,9 @@ do_action( 'lightning_site_header_after', 'lightning_site_header_after' );
             ?>
             <script>
                 document.addEventListener("DOMContentLoaded", function() {
-                    logTitle("<?php echo esc_js( the_title( '', '', false ) ); ?>");
+                    var title = "<?php echo esc_js( the_title( '', '', false ) ); ?>";
+                    var area = "<?php echo esc_js( get_post_meta( get_the_ID(), 'address', true ) ); ?>";
+                    if(title && area) logTitle(title, area.match(/^.*?市/)[0]);
                 });
             </script>
         </div>

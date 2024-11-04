@@ -30,7 +30,7 @@ function my_script_init() {
     wp_enqueue_style("swiper", "https://unpkg.com/swiper@8/swiper-bundle.min.css", array(), "all");
     wp_enqueue_style("land", get_stylesheet_directory_uri() . "/css/land.min.css", array(), filemtime(get_stylesheet_directory() . "/css/land.min.css"));
     wp_enqueue_script("swiper", "https://unpkg.com/swiper@8/swiper-bundle.min.js", array(), true);
-    wp_enqueue_script( 'land', get_stylesheet_directory_uri() . "/js/land.js", array('swiper'), filemtime(get_stylesheet_directory() . "/js/land.js"), true);
+    wp_enqueue_script( 'land', get_stylesheet_directory_uri() . "/js/land.js", array(), filemtime(get_stylesheet_directory() . "/js/land.js"), true);
   }
 
   if((is_single()) || is_category() || (is_archive())){
